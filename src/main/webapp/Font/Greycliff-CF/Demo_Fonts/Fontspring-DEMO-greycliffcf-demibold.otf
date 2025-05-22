@@ -1,0 +1,198 @@
+{"version":3,"sources":["../../../../src/client/components/router-reducer/compute-changed-path.ts"],"sourcesContent":["import type {\n  FlightRouterState,\n  Segment,\n} from '../../../server/app-render/types'\nimport { INTERCEPTION_ROUTE_MARKERS } from '../../../server/lib/interception-routes'\nimport type { Params } from '../../../server/request/params'\nimport {\n  isGroupSegment,\n  DEFAULT_SEGMENT_KEY,\n  PAGE_SEGMENT_KEY,\n} from '../../../shared/lib/segment'\nimport { matchSegment } from '../match-segments'\n\nconst removeLeadingSlash = (segment: string): string => {\n  return segment[0] === '/' ? segment.slice(1) : segment\n}\n\nconst segmentToPathname = (segment: Segment): string => {\n  if (typeof segment === 'string') {\n    // 'children' is not a valid path -- it's technically a parallel route that corresponds with the current segment's page\n    // if we don't skip it, then the computed pathname might be something like `/children` which doesn't make sense.\n    if (segment === 'children') return ''\n\n    return segment\n  }\n\n  return segment[1]\n}\n\nfunction normalizeSegments(segments: string[]): string {\n  return (\n    segments.reduce((acc, segment) => {\n      segment = removeLeadingSlash(segment)\n      if (segment === '' || isGroupSegment(segment)) {\n        return acc\n      }\n\n      return `${acc}/${segment}`\n    }, '') || '/'\n  )\n}\n\nexport function extractPathFromFlightRouterState(\n  flightRouterState: FlightRouterState\n): string | undefined {\n  const segment = Array.isArray(flightRouterState[0])\n    ? flightRouterState[0][1]\n    : flightRouterState[0]\n\n  if (\n    segment === DEFAULT_SEGMENT_KEY ||\n    INTERCEPTION_ROUTE_MARKERS.some((m) => segment.startsWith(m))\n  )\n    return undefined\n\n  if (segment.startsWith(PAGE_SEGMENT_KEY)) return ''\n\n  const segments = [segmentToPathname(segment)]\n  const parallelRoutes = flightRouterState[1] ?? {}\n\n  const childrenPath = parallelRoutes.children\n    ? extractPathFromFlightRouterState(parallelRoutes.children)\n    : undefined\n\n  if (childrenPath !== undefined) {\n    segments.push(childrenPath)\n  } else {\n    for (const [key, value] of Object.entries(parallelRoutes)) {\n      if (key === 'children') continue\n\n      const childPath = extractPathFromFlightRouterState(value)\n\n      if (childPath !== undefined) {\n        segments.push(childPath)\n      }\n    }\n  }\n\n  return normalizeSegments(segments)\n}\n\nfunction computeChangedPathImpl(\n  treeA: FlightRouterState,\n  treeB: FlightRouterState\n): string | null {\n  const [segmentA, parallelRoutesA] = treeA\n  const [segmentB, parallelRoutesB] = treeB\n\n  const normalizedSegmentA = segmentToPathname(segmentA)\n  const normalizedSegmentB = segmentToPathname(segmentB)\n\n  if (\n    INTERCEPTION_ROUTE_MARKERS.some(\n      (m) =>\n        normalizedSegmentA.startsWith(m) || normalizedSegmentB.startsWith(m)\n    )\n  ) {\n    return ''\n  }\n\n  if (!matchSegment(segmentA, segmentB)) {\n    // once we find where the tree changed, we compute the rest of the path by traversing the tree\n    return extractPathFromFlightRouterState(treeB) ?? ''\n  }\n\n  for (const parallelRouterKey in parallelRoutesA) {\n    if (parallelRoutesB[parallelRouterKey]) {\n      const changedPath = computeChangedPathImpl(\n        parallelRoutesA[parallelRouterKey],\n        parallelRoutesB[parallelRouterKey]\n      )\n      if (changedPath !== null) {\n        return `${segmentToPathname(segmentB)}/${changedPath}`\n      }\n    }\n  }\n\n  return null\n}\n\nexport function computeChangedPath(\n  treeA: FlightRouterState,\n  treeB: FlightRouterState\n): string | null {\n  const changedPath = computeChangedPathImpl(treeA, treeB)\n\n  if (changedPath == null || changedPath === '/') {\n    return changedPath\n  }\n\n  // lightweight normalization to remove route groups\n  return normalizeSegments(changedPath.split('/'))\n}\n\n/**\n * Recursively extracts dynamic parameters from FlightRouterState.\n */\nexport function getSelectedParams(\n  currentTree: FlightRouterState,\n  params: Params = {}\n): Params {\n  const parallelRoutes = currentTree[1]\n\n  for (const parallelRoute of Object.values(parallelRoutes)) {\n    const segment = parallelRoute[0]\n    const isDynamicParameter = Array.isArray(segment)\n    const segmentValue = isDynamicParameter ? segment[1] : segment\n    if (!segmentValue || segmentValue.startsWith(PAGE_SEGMENT_KEY)) continue\n\n    // Ensure catchAll and optional catchall are turned into an array\n    const isCatchAll =\n      isDynamicParameter && (segment[2] === 'c' || segment[2] === 'oc')\n\n    if (isCatchAll) {\n      params[segment[0]] = segment[1].split('/')\n    } else if (isDynamicParameter) {\n      params[segment[0]] = segment[1]\n    }\n\n    params = getSelectedParams(parallelRoute, params)\n  }\n\n  return params\n}\n"],"names":["computeChangedPath","extractPathFromFlightRouterState","getSelectedParams","removeLeadingSlash","segment","slice","segmentToPathname","normalizeSegments","segments","reduce","acc","isGroupSegment","flightRouterState","Array","isArray","DEFAULT_SEGMENT_KEY","INTERCEPTION_ROUTE_MARKERS","some","m","startsWith","undefined","PAGE_SEGMENT_KEY","parallelRoutes","childrenPath","children","push","key","value","Object","entries","childPath","computeChangedPathImpl","treeA","treeB","segmentA","parallelRoutesA","segmentB","parallelRoutesB","normalizedSegmentA","normalizedSegmentB","matchSegment","parallelRouterKey","changedPath","split","currentTree","params","parallelRoute","values","isDynamicParameter","segmentValue","isCatchAll"],"mappings":";;;;;;;;;;;;;;;;IAwHgBA,kBAAkB;eAAlBA;;IA9EAC,gCAAgC;eAAhCA;;IA+FAC,iBAAiB;eAAjBA;;;oCArI2B;yBAMpC;+BACsB;AAE7B,MAAMC,qBAAqB,CAACC;IAC1B,OAAOA,OAAO,CAAC,EAAE,KAAK,MAAMA,QAAQC,KAAK,CAAC,KAAKD;AACjD;AAEA,MAAME,oBAAoB,CAACF;IACzB,IAAI,OAAOA,YAAY,UAAU;QAC/B,uHAAuH;QACvH,gHAAgH;QAChH,IAAIA,YAAY,YAAY,OAAO;QAEnC,OAAOA;IACT;IAEA,OAAOA,OAAO,CAAC,EAAE;AACnB;AAEA,SAASG,kBAAkBC,QAAkB;IAC3C,OACEA,SAASC,MAAM,CAAC,CAACC,KAAKN;QACpBA,UAAUD,mBAAmBC;QAC7B,IAAIA,YAAY,MAAMO,IAAAA,uBAAc,EAACP,UAAU;YAC7C,OAAOM;QACT;QAEA,OAAO,AAAGA,MAAI,MAAGN;IACnB,GAAG,OAAO;AAEd;AAEO,SAASH,iCACdW,iBAAoC;IAEpC,MAAMR,UAAUS,MAAMC,OAAO,CAACF,iBAAiB,CAAC,EAAE,IAC9CA,iBAAiB,CAAC,EAAE,CAAC,EAAE,GACvBA,iBAAiB,CAAC,EAAE;IAExB,IACER,YAAYW,4BAAmB,IAC/BC,8CAA0B,CAACC,IAAI,CAAC,CAACC,IAAMd,QAAQe,UAAU,CAACD,KAE1D,OAAOE;IAET,IAAIhB,QAAQe,UAAU,CAACE,yBAAgB,GAAG,OAAO;IAEjD,MAAMb,WAAW;QAACF,kBAAkBF;KAAS;QACtBQ;IAAvB,MAAMU,iBAAiBV,CAAAA,sBAAAA,iBAAiB,CAAC,EAAE,YAApBA,sBAAwB,CAAC;IAEhD,MAAMW,eAAeD,eAAeE,QAAQ,GACxCvB,iCAAiCqB,eAAeE,QAAQ,IACxDJ;IAEJ,IAAIG,iBAAiBH,WAAW;QAC9BZ,SAASiB,IAAI,CAACF;IAChB,OAAO;QACL,KAAK,MAAM,CAACG,KAAKC,MAAM,IAAIC,OAAOC,OAAO,CAACP,gBAAiB;YACzD,IAAII,QAAQ,YAAY;YAExB,MAAMI,YAAY7B,iCAAiC0B;YAEnD,IAAIG,cAAcV,WAAW;gBAC3BZ,SAASiB,IAAI,CAACK;YAChB;QACF;IACF;IAEA,OAAOvB,kBAAkBC;AAC3B;AAEA,SAASuB,uBACPC,KAAwB,EACxBC,KAAwB;IAExB,MAAM,CAACC,UAAUC,gBAAgB,GAAGH;IACpC,MAAM,CAACI,UAAUC,gBAAgB,GAAGJ;IAEpC,MAAMK,qBAAqBhC,kBAAkB4B;IAC7C,MAAMK,qBAAqBjC,kBAAkB8B;IAE7C,IACEpB,8CAA0B,CAACC,IAAI,CAC7B,CAACC,IACCoB,mBAAmBnB,UAAU,CAACD,MAAMqB,mBAAmBpB,UAAU,CAACD,KAEtE;QACA,OAAO;IACT;IAEA,IAAI,CAACsB,IAAAA,2BAAY,EAACN,UAAUE,WAAW;YAE9BnC;QADP,8FAA8F;QAC9F,OAAOA,CAAAA,oCAAAA,iCAAiCgC,kBAAjChC,oCAA2C;IACpD;IAEA,IAAK,MAAMwC,qBAAqBN,gBAAiB;QAC/C,IAAIE,eAAe,CAACI,kBAAkB,EAAE;YACtC,MAAMC,cAAcX,uBAClBI,eAAe,CAACM,kBAAkB,EAClCJ,eAAe,CAACI,kBAAkB;YAEpC,IAAIC,gBAAgB,MAAM;gBACxB,OAAO,AAAGpC,kBAAkB8B,YAAU,MAAGM;YAC3C;QACF;IACF;IAEA,OAAO;AACT;AAEO,SAAS1C,mBACdgC,KAAwB,EACxBC,KAAwB;IAExB,MAAMS,cAAcX,uBAAuBC,OAAOC;IAElD,IAAIS,eAAe,QAAQA,gBAAgB,KAAK;QAC9C,OAAOA;IACT;IAEA,mDAAmD;IACnD,OAAOnC,kBAAkBmC,YAAYC,KAAK,CAAC;AAC7C;AAKO,SAASzC,kBACd0C,WAA8B,EAC9BC,MAAmB;IAAnBA,IAAAA,mBAAAA,SAAiB,CAAC;IAElB,MAAMvB,iBAAiBsB,WAAW,CAAC,EAAE;IAErC,KAAK,MAAME,iBAAiBlB,OAAOmB,MAAM,CAACzB,gBAAiB;QACzD,MAAMlB,UAAU0C,aAAa,CAAC,EAAE;QAChC,MAAME,qBAAqBnC,MAAMC,OAAO,CAACV;QACzC,MAAM6C,eAAeD,qBAAqB5C,OAAO,CAAC,EAAE,GAAGA;QACvD,IAAI,CAAC6C,gBAAgBA,aAAa9B,UAAU,CAACE,yBAAgB,GAAG;QAEhE,iEAAiE;QACjE,MAAM6B,aACJF,sBAAuB5C,CAAAA,OAAO,CAAC,EAAE,KAAK,OAAOA,OAAO,CAAC,EAAE,KAAK,IAAG;QAEjE,IAAI8C,YAAY;YACdL,MAAM,CAACzC,OAAO,CAAC,EAAE,CAAC,GAAGA,OAAO,CAAC,EAAE,CAACuC,KAAK,CAAC;QACxC,OAAO,IAAIK,oBAAoB;YAC7BH,MAAM,CAACzC,OAAO,CAAC,EAAE,CAAC,GAAGA,OAAO,CAAC,EAAE;QACjC;QAEAyC,SAAS3C,kBAAkB4C,eAAeD;IAC5C;IAEA,OAAOA;AACT"}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                function __promisify__(
+            file: string,
+            options: ExecFileOptionsWithOtherEncoding,
+        ): PromiseWithChild<{
+            stdout: string | Buffer;
+            stderr: string | Buffer;
+        }>;
+        function __promisify__(
+            file: string,
+            args: readonly string[] | undefined | null,
+            options: ExecFileOptionsWithOtherEncoding,
+        ): PromiseWithChild<{
+            stdout: string | Buffer;
+            stderr: string | Buffer;
+        }>;
+        function __promisify__(
+            file: string,
+            options: ExecFileOptions,
+        ): PromiseWithChild<{
+            stdout: string;
+            stderr: string;
+        }>;
+        function __promisify__(
+            file: string,
+            args: readonly string[] | undefined | null,
+            options: ExecFileOptions,
+        ): PromiseWithChild<{
+            stdout: string;
+            stderr: string;
+        }>;
+        function __promisify__(
+            file: string,
+            options: (ObjectEncodingOptions & ExecFileOptions) | undefined | null,
+        ): PromiseWithChild<{
+            stdout: string | Buffer;
+            stderr: string | Buffer;
+        }>;
+        function __promisify__(
+            file: string,
+            args: readonly string[] | undefined | null,
+            options: (ObjectEncodingOptions & ExecFileOptions) | undefined | null,
+        ): PromiseWithChild<{
+            stdout: string | Buffer;
+            stderr: string | Buffer;
+        }>;
+    }
+    interface ForkOptions extends ProcessEnvOptions, MessagingOptions, Abortable {
+        execPath?: string | undefined;
+        execArgv?: string[] | undefined;
+        silent?: boolean | undefined;
+        /**
+         * Can be set to 'pipe', 'inherit', 'overlapped', or 'ignore', or an array of these strings.
+         * If passed as an array, the first element is used for `stdin`, the second for
+         * `stdout`, and the third for `stderr`. A fourth element can be used to
+         * specify the `stdio` behavior beyond the standard streams. See
+         * {@link ChildProcess.stdio} for more information.
+         *
+         * @default 'pipe'
+         */
+        stdio?: StdioOptions | undefined;
+        detached?: boolean | undefined;
+        windowsVerbatimArguments?: boolean | undefined;
+    }
+    /**
+     * The `child_process.fork()` method is a special case of {@link spawn} used specifically to spawn new Node.js processes.
+     * Like {@link spawn}, a `ChildProcess` object is returned. The
+     * returned `ChildProcess` will have an additional communication channel
+     * built-in that allows messages to be passed back and forth between the parent and
+     * child. See `subprocess.send()` for details.
+     *
+     * Keep in mind that spawned Node.js child processes are
+     * independent of the parent with exception of the IPC communication channel
+     * that is established between the two. Each process has its own memory, with
+     * their own V8 instances. Because of the additional resource allocations
+     * required, spawning a large number of child Node.js processes is not
+     * recommended.
+     *
+     * By default, `child_process.fork()` will spawn new Node.js instances using the `process.execPath` of the parent process. The `execPath` property in the `options` object allows for an alternative
+     * execution path to be used.
+     *
+     * Node.js processes launched with a custom `execPath` will communicate with the
+     * parent process using the file descriptor (fd) identified using the
+     * environment variable `NODE_CHANNEL_FD` on the child process.
+     *
+     * Unlike the [`fork(2)`](http://man7.org/linux/man-pages/man2/fork.2.html) POSIX system call, `child_process.fork()` does not clone the
+     * current process.
+     *
+     * The `shell` option available in {@link spawn} is not supported by `child_process.fork()` and will be ignored if set.
+     *
+     * If the `signal` option is enabled, calling `.abort()` on the corresponding `AbortController` is similar to calling `.kill()` on the child process except
+     * the error passed to the callback will be an `AbortError`:
+     *
+     * ```js
+     * if (process.argv[2] === 'child') {
+     *   setTimeout(() => {
+     *     console.log(`Hello from ${process.argv[2]}!`);
+     *   }, 1_000);
+     * } else {
+     *   import { fork } from 'node:child_process';
+     *   const controller = new AbortController();
+     *   const { signal } = controller;
+     *   const child = fork(__filename, ['child'], { signal });
+     *   child.on('error', (err) => {
+     *     // This will be called with err being an AbortError if the controller aborts
+     *   });
+     *   controller.abort(); // Stops the child process
+     * }
+     * ```
+     * @since v0.5.0
+     * @param modulePath The module to run in the child.
+     * @param args List of string arguments.
+     */
+    function fork(modulePath: string | URL, options?: ForkOptions): ChildProcess;
+    function fork(modulePath: string | URL, args?: readonly string[], options?: ForkOptions): ChildProcess;
+    interface SpawnSyncOptions extends CommonSpawnOptions {
+        input?: string | NodeJS.ArrayBufferView | undefined;
+        maxBuffer?: number | undefined;
+        encoding?: BufferEncoding | "buffer" | null | undefined;
+    }
+    interface SpawnSyncOptionsWithStringEncoding extends SpawnSyncOptions {
+        encoding: BufferEncoding;
+    }
+    interface SpawnSyncOptionsWithBufferEncoding extends SpawnSyncOptions {
+        encoding?: "buffer" | null | undefined;
+    }
+    interface SpawnSyncReturns<T> {
+        pid: number;
+        output: Array<T | null>;
+        stdout: T;
+        stderr: T;
+        status: number | null;
+        signal: NodeJS.Signals | null;
+        error?: Error | undefined;
+    }
+    /**
+     * The `child_process.spawnSync()` method is generally identical to {@link spawn} with the exception that the function will not return
+     * until the child process has fully closed. When a timeout has been encountered
+     * and `killSignal` is sent, the method won't return until the process has
+     * completely exited. If the process intercepts and handles the `SIGTERM` signal
+     * and doesn't exit, the parent process will wait until the child process has
+     * exited.
+     *
+     * **If the `shell` option is enabled, do not pass unsanitized user input to this**
+     * **function. Any input containing shell metacharacters may be used to trigger**
+     * **arbitrary command execution.**
+     * @since v0.11.12
+     * @param command The command to run.
+     * @param args List of string arguments.
+     */
+    function spawnSync(command: string): SpawnSyncReturns<Buffer>;
+    function spawnSync(command: string, options: SpawnSyncOptionsWithStringEncoding): SpawnSyncReturns<string>;
+    function spawnSync(command: string, options: SpawnSyncOptionsWithBufferEncoding): SpawnSyncReturns<Buffer>;
+    function spawnSync(command: string, options?: SpawnSyncOptions): SpawnSyncReturns<string | Buffer>;
+    function spawnSync(command: string, args: readonly string[]): SpawnSyncReturns<Buffer>;
+    function spawnSync(
+        command: string,
+        args: readonly string[],
+        options: SpawnSyncOptionsWithStringEncoding,
+    ): SpawnSyncReturns<string>;
+    function spawnSync(
+        command: string,
+        args: readonly string[],
+        options: SpawnSyncOptionsWithBufferEncoding,
+    ): SpawnSyncReturns<Buffer>;
+    function spawnSync(
+        command: string,
+        args?: readonly string[],
+        options?: SpawnSyncOptions,
+    ): SpawnSyncReturns<string | Buffer>;
+    interface CommonExecOptions extends CommonOptions {
+        input?: string | NodeJS.ArrayBufferView | undefined;
+        /**
+         * Can be set to 'pipe', 'inherit, or 'ignore', or an array of these strings.
+         * If passed as an array, the first element is used for `stdin`, the second for
+         * `stdout`, and the third for `stderr`. A fourth element can be used to
+         * specify the `stdio` behavior beyond the standard streams. See
+         * {@link ChildProcess.stdio} for more information.
+         *
+         * @default 'pipe'
+         */
+        stdio?: StdioOptions | undefined;
+        killSignal?: NodeJS.Signals | number | undefined;
+        maxBuffer?: number | undefined;
+        encoding?: BufferEncoding | "buffer" | null | undefined;
+    }
+    interface ExecSyncOptions extends CommonExecOptions {
+        shell?: string | undefined;
+    }
+    interface ExecSyncOptionsWithStringEncoding extends ExecSyncOptions {
+        encoding: BufferEncoding;
+    }
+    interface ExecSyncOptionsWithBufferEncoding extends ExecSyncOptions {
+        encoding?: "buffer" | null | undefined;
+    }
+    /**
+     * The `child_process.execSync()` method is generally identical to {@link exec} with the exception that the method will not return
+     * until the child process has fully closed. When a timeout has been encountered
+     * and `killSignal` is sent, the met
