@@ -7,7 +7,81 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <link rel="stylesheet" href="css/style.css">
         <link rel="icon" type ="image/x-icon" href="#">
-        <title>Order Tickets | SIZZLING CONCERT</title>
+        <title>Select Tickets | SIZZLING CONCERT</title>
+        <style>
+            .ticket-container {
+                max-width: 800px;
+                margin: 20px auto;
+                padding: 20px;
+                background: rgba(255, 255, 255, 0.95);
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+            .ticket-options {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+                margin: 20px 0;
+            }
+            .ticket-type {
+                border: 2px solid #ddd;
+                border-radius: 10px;
+                padding: 20px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .ticket-type:hover {
+                border-color: #e44d26;
+                transform: translateY(-5px);
+            }
+            .ticket-type.selected {
+                border-color: #e44d26;
+                background: #fff5f2;
+            }
+            .ticket-type h3 {
+                color: #333;
+                margin-bottom: 10px;
+            }
+            .ticket-type .price {
+                color: #e44d26;
+                font-size: 1.5em;
+                font-weight: bold;
+                margin: 10px 0;
+            }
+            .ticket-type .features {
+                list-style: none;
+                padding: 0;
+                margin: 15px 0;
+            }
+            .ticket-type .features li {
+                margin: 5px 0;
+                color: #666;
+            }
+            .ticket-type .features li:before {
+                content: "✓";
+                color: #e44d26;
+                margin-right: 10px;
+            }
+            .continue-button {
+                background: #e44d26;
+                color: white;
+                padding: 15px 30px;
+                border: none;
+                border-radius: 5px;
+                font-size: 1.2em;
+                cursor: pointer;
+                width: 100%;
+                margin-top: 20px;
+                transition: background 0.3s ease;
+            }
+            .continue-button:hover {
+                background: #c73e1d;
+            }
+            .continue-button:disabled {
+                background: #ccc;
+                cursor: not-allowed;
+            }
+        </style>
     </head>
     <body>
         <div class="bg fill bg-fill bg-loaded">
@@ -20,64 +94,70 @@
             <div class="header">
                 <ul class="ul-header-list">
                     <li><a href="index.jsp">Home</a></li>
-                    <li><a href="Consert.jsp">Concert</a></li>
+                    <li><a href="Concert.jsp">Concert</a></li>
                     <li><a href="News.jsp">News</a></li>
                     <li><a href="About-Us.jsp">About Us</a></li>
-                    <li><a href="#" id="buy-now">Buy one now!</a></li>
+                    <li><a href="Order.jsp" id="buy-now">Buy one now!</a></li>
                 </ul>
             </div>
         </div>
         <div class="content">
-            <div class="flex-content">
-                <h1 class="event-title" style="font-family: 'Segoe UI', Geneva, Verdana, sans-serif;">Order Your Tickets</h1>
+            <div class="ticket-container">
+                <h2>Select Your Ticket Type</h2>
                 
-                <div class="order-container">
-                    <div class="concert-details">
-                        <!-- Concert Image -->
-                        <img src="../Images/sample-concert-image.jpg" alt="Concert Image">
-                        <h2>Concert Title</h2>
-                        <p>Date: December 31, 2025</p>
-                        <p>Location: Grand Arena</p>
-                        <p>Description: This is a placeholder for the concert description. It will provide details about the artists, event schedule, and any other relevant information.</p>
-                    </div>
+                <%
+                // Get parameters from the request
+                String title = request.getParameter("title");
+                String date = request.getParameter("date");
+                String location = request.getParameter("location");
+                String artist = request.getParameter("artist");
+                String genre = request.getParameter("genre");
+                String basePrice = request.getParameter("price");
+                
+                // Calculate VIP price (50% more than regular)
+                double regularPrice = 0;
+                try {
+                    regularPrice = Double.parseDouble(basePrice != null ? basePrice : "0");
+                } catch (NumberFormatException e) {
+                    regularPrice = 0;
+                }
+                double vipPrice = regularPrice * 1.5;
+                %>
 
-                    <div class="ticket-options">
-                        <h3>Available Tickets</h3>
-                        <div class="ticket-item">
-                            <div class="ticket-info">
-                                <h4>VIP Pass</h4>
-                                <p>Price: Rp 1.500.000</p>
-                            </div>
-                            <div class="quantity-control">
-                                <button>-</button>
-                                <input type="text" value="0">
-                                <button>+</button>
-                            </div>
-                        </div>
-                        <div class="ticket-item">
-                            <div class="ticket-info">
-                                <h4>Regular Pass</h4>
-                                <p>Price: Rp 750.000</p>
-                            </div>
-                            <div class="quantity-control">
-                                <button>-</button>
-                                <input type="text" value="0">
-                                <button>+</button>
-                            </div>
-                        </div>
-                        <!-- Add more ticket types here -->
-                    </div>
-
-                    <div class="order-summary">
-                        <h3>Order Summary</h3>
-                        <p>Total: Rp 0</p>
-                        <!-- This will be updated with selected ticket prices -->
-                    </div>
-
-                    <a href="#" class="buy-now-button">Proceed to Checkout</a>
-
+                <div class="concert-info" style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 5px;">
+                    <h3 style="margin-bottom: 10px;"><%= title %></h3>
+                    <p><strong>Artist:</strong> <%= artist %></p>
+                    <p><strong>Date:</strong> <%= date %></p>
+                    <p><strong>Location:</strong> <%= location %></p>
                 </div>
-                
+
+                <div class="ticket-options">
+                    <div class="ticket-type" data-type="Regular" data-price="<%= regularPrice %>" onclick="selectTicketType(this)">
+                        <h3>Regular Ticket</h3>
+                        <div class="price">Rp <%= String.format("%,.0f", regularPrice) %></div>
+                        <ul class="features">
+                            <li>Standard seating</li>
+                            <li>Access to main concert area</li>
+                            <li>Basic amenities</li>
+                            <li>Standard entry time</li>
+                        </ul>
+                    </div>
+
+                    <div class="ticket-type" data-type="VIP" data-price="<%= vipPrice %>" onclick="selectTicketType(this)">
+                        <h3>VIP Ticket</h3>
+                        <div class="price">Rp <%= String.format("%,.0f", vipPrice) %></div>
+                        <ul class="features">
+                            <li>Premium seating</li>
+                            <li>Exclusive VIP area access</li>
+                            <li>Complimentary refreshments</li>
+                            <li>Early entry</li>
+                            <li>Meet & Greet opportunity</li>
+                            <li>Exclusive merchandise</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="continue-button" onclick="continueToPayment()" disabled>Continue to Payment</button>
             </div>
         </div>
         <div class="footer">
@@ -124,6 +204,37 @@
                 <p>&copy; 2025 SZLConcert Org. All rights reserved.</p>
             </div>
         </div>
-    <script type="text/javascript" src="js/response.js"></script>
+        <script>
+            let selectedTicketType = null;
+            let selectedPrice = 0;
+
+            function selectTicketType(element) {
+                // Remove selected class from all ticket types
+                document.querySelectorAll('.ticket-type').forEach(ticket => {
+                    ticket.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked ticket type
+                element.classList.add('selected');
+                selectedTicketType = element.getAttribute('data-type');
+                selectedPrice = parseFloat(element.getAttribute('data-price'));
+                
+                // Enable continue button
+                document.querySelector('.continue-button').disabled = false;
+            }
+
+            function continueToPayment() {
+                if (!selectedTicketType) {
+                    alert('Please select a ticket type');
+                    return;
+                }
+
+                // Redirect to process order page with all parameters
+                const params = new URLSearchParams(window.location.search);
+                params.set('ticketType', selectedTicketType);
+                params.set('price', selectedPrice);
+                window.location.href = 'processOrder.jsp?' + params.toString();
+            }
+        </script>
     </body>
 </html> 

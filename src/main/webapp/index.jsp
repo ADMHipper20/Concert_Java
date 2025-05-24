@@ -1,5 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.webappjsp.model.Concert" %>
 <%@ page import="java.util.List" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.ArrayList" %>
 <!DOCTYPE HTML>
 <html lang="en-us">
     <head>
@@ -21,7 +23,7 @@
             <div class="header">
                 <ul class="ul-header-list">
                     <li><a href="index.jsp">Home</a></li>
-                    <li><a href="Consert.jsp">Concert</a></li>
+                    <li><a href="Concert.jsp">Concert</a></li>
                     <li><a href="News.jsp">News</a></li>
                     <li><a href="About-Us.jsp">About Us</a></li>
                     <li><a href="Order.jsp" id="buy-now">Buy one now!</a></li>
@@ -30,7 +32,7 @@
         </div>
         <div class="content">
             <div class="search-container">
-                <form action="/result" method="GET" class="search-form">
+                <form action="result.jsp" method="GET" class="search-form">
                     <div class="search-bar">
                         <input type="text" name="search_query" autocomplete="off" autocorrect="off" placeholder="Search ur favorite concert!">
                         <button type="submit" class="search-button" aria-label="Search">
@@ -42,41 +44,115 @@
                 </form>
             </div>
             <div class="flex-content">
-                <h1 class="event-title" style="font-family: 'Segoe UI', Geneva, Verdana, sans-serif;">GO CHOOSE UR CONCERT AND BUY IT!</h1>
-                <div class="concert-card">
-                    <img src="Images/concert1.jpg" alt="Concert 1">
-                    <div class="concert-info">
-                        <h3>Concert Title 1</h3>
-                        <p>Date: December 31, 2025</p>
-                        <p>Location: Grand Arena</p>
-                        <a href="ConcertDetails.jsp?title=Concert Title 1&date=December 31, 2025&location=Grand Arena&description=Experience an unforgettable night of music with our star-studded lineup. This concert features special guest appearances and exclusive performances.&price=750000" class="buy-now-button">View Details</a>
-                    </div>
-                </div>
-                <div class="concert-card">
-                    <img src="Images/concert2.jpg" alt="Concert 2">
-                    <div class="concert-info">
-                        <h3>Concert Title 2</h3>
-                        <p>Date: January 15, 2026</p>
-                        <p>Location: City Stadium</p>
-                        <a href="ConcertDetails.jsp?title=Concert Title 2&date=January 15, 2026&location=City Stadium&description=Join us for a spectacular evening of live music featuring top artists from around the world. Special effects and amazing stage production guaranteed.&price=850000" class="buy-now-button">View Details</a>
-                    </div>
-                </div>
-                <a href="ConcertDetails.jsp">
-                    <li class="main-event-3" id="main-event-3">
-                        <div class="card-content">
-                            <h3>Concert Title 3</h3>
-                            <p class="date">February 1, 2025</p>
-                            <p class="location">Gelora Bung Karno</p>
-                            <p class="description">${ConcertHelper.truncateWords("Don't miss this exclusive concert featuring the hottest artists of the year. Limited tickets available!", 11) }</p>
-                            <a href="Order.jsp" class="price-tag">Starting from Rp 1.000.000</a>
+                <h1 class="event-title" style="font-family: 'Segoe UI', Geneva, Verdana, sans-serif;">UPCOMING CONCERTS</h1>
+
+                <% // Hardcoded list of concerts (can be replaced with dynamic data later) %>
+                <%
+                    List<Concert> upcomingConcerts = new ArrayList<>();
+                    upcomingConcerts.add(new Concert(
+                        "YOASOBI World Tour 2024",
+                        "June 15, 2024",
+                        "ICE BSD, Tangerang",
+                        "Experience the electrifying performance of YOASOBI on their World Tour.",
+                        "Images/Concerts/yoasobi.jpg",
+                        1500000,
+                        "YOASOBI",
+                        "J-Pop, Electronic"
+                    ));
+                    upcomingConcerts.add(new Concert(
+                        "ONE OK ROCK Luxury Disease Tour",
+                        "July 20, 2024",
+                        "JIExpo Kemayoran, Jakarta",
+                        "Experience ONE OK ROCK live on their Luxury Disease Tour.",
+                        "Images/Concerts/oneokrock.jpg",
+                        1800000,
+                        "ONE OK ROCK",
+                        "Rock, Alternative"
+                    ));
+                     upcomingConcerts.add(new Concert(
+                        "RADWIMPS Asia Tour 2024",
+                        "August 5, 2024",
+                        "ICE BSD, Tangerang",
+                        "Catch RADWIMPS on their exciting Asia Tour.",
+                        "Images/Concerts/radwimps.jpg",
+                        1600000,
+                        "RADWIMPS",
+                        "Rock, J-Rock"
+                    ));
+                    upcomingConcerts.add(new Concert(
+                        "Ed Sheeran Mathematics Tour",
+                        "September 10, 2024",
+                        "Gelora Bung Karno, Jakarta",
+                        "An intimate evening with Ed Sheeran on his Mathematics Tour.",
+                        "Images/Concerts/ed-sheeran.jpg",
+                        2000000,
+                        "Ed Sheeran",
+                        "Pop, Folk"
+                    ));
+                    upcomingConcerts.add(new Concert(
+                        "Coldplay Music of the Spheres Tour",
+                        "October 15, 2024",
+                        "Gelora Bung Karno, Jakarta",
+                        "Join Coldplay for a spectacular evening of live music.",
+                        "Images/Concerts/coldplay.jpg",
+                        2500000,
+                        "Coldplay",
+                        "Rock, Alternative"
+                    ));
+                     upcomingConcerts.add(new Concert(
+                        "BLACKPINK Born Pink World Tour",
+                        "November 20, 2024",
+                        "ICE BSD, Tangerang",
+                        "Don't miss Blackpink's Born Pink World Tour!",
+                        "Images/Concerts/blackpink.jpg",
+                        2200000,
+                        "BLACKPINK",
+                        "K-Pop, Pop"
+                    ));
+                     upcomingConcerts.add(new Concert(
+                        "Liam Gallagher Definitely Maybe Tour",
+                        "December 5, 2024",
+                        "JIExpo Kemayoran, Jakarta",
+                        "Liam Gallagher performs the iconic album 'Definitely Maybe'.",
+                        "Images/Concerts/liam-gallagher.jpg",
+                        1800000,
+                        "Liam Gallagher",
+                        "Rock, Britpop"
+                    ));
+                      upcomingConcerts.add(new Concert(
+                        "Arctic Monkeys The Car Tour",
+                        "January 15, 2025",
+                        "ICE BSD, Tangerang",
+                        "Arctic Monkeys on their latest tour, 'The Car'.",
+                        "Images/Concerts/arctic-monkeys.jpg",
+                        1900000,
+                        "Arctic Monkeys",
+                        "Rock, Indie"
+                    ));
+                %>
+
+                <% for (Concert concert : upcomingConcerts) { %>
+                    <div class="concert-card">
+                        <img src="<%= concert.getImageUrl() %>" alt="<%= concert.getTitle() %>">
+                        <div class="concert-info">
+                            <div class="concert-details">
+                                <h3><%= concert.getTitle() %></h3>
+                                <p>Artist: <%= concert.getArtist() %></p>
+                                <p>Genre: <%= concert.getGenre() %></p>
+                                <p>Date: <%= concert.getDate() %></p>
+                                <p>Location: <%= concert.getLocation() %></p>
+                                <p class="description"><%= concert.getDescription() %></p>
+                            </div>
+                            <a href="Order.jsp?title=<%= concert.getTitle() %>&artist=<%= concert.getArtist() %>&genre=<%= concert.getGenre() %>&date=<%= concert.getDate() %>&location=<%= concert.getLocation() %>&price=<%= concert.getPrice() %>" class="buy-now-button">View Details</a>
                         </div>
-                    </li>
-                </a>
+                    </div>
+                <% } %>
+
             </div>
             <div class="aboutKoi">
                 <div class="about-content">
                     <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 28px; color: black; text-align: justify; font-weight: 600;">
-                        
+
                     </p>
                 </div>
             </div>

@@ -1,4 +1,6 @@
-model\jdbc.class
+com\webappjsp\controller\HomeServlet.class
+com\webappjsp\servlet\SearchResultServlet.class
+com\webappjsp\model\jdbc.class
+com\webappjsp\model\Concert.class
 com\webappjsp\helpers\ConcertHelper.class
-controller\HomeServlet.class
-model\User.class
+com\webappjsp\model\User.class

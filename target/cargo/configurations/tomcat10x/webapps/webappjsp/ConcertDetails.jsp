@@ -18,7 +18,7 @@
         <div class="header">
             <ul class="ul-header-list">
                 <li><a href="index.jsp">Home</a></li>
-                <li><a href="Consert.jsp">Concert</a></li>
+                <li><a href="Concert.jsp">Concert</a></li>
                 <li><a href="News.jsp">News</a></li>
                 <li><a href="About-Us.jsp">About Us</a></li>
                 <li><a href="Order.jsp" id="buy-now">Buy one now!</a></li>
@@ -29,20 +29,25 @@
         <div class="flex-content">
             <h1 class="event-title" style="font-family: 'Segoe UI', Geneva, Verdana, sans-serif;">Concert Details</h1>
             
-            <!-- Placeholder for Concert Details -->
-            <div class="concert-details-container" style="color: white; text-align: left; max-width: 800px; margin: 20px auto;">
-                <h2>[Concert Title]</h2>
-                <p><strong>Date:</strong> [Concert Date]</p>
-                <p><strong>Location:</strong> [Concert Location]</p>
-                <p><strong>Description:</strong> [Full Concert Description]</p>
+            <div class="concert-details-container" style="color: white; text-align: left; max-width: 800px; margin: 20px auto; background: rgba(0, 0, 0, 0.7); padding: 20px; border-radius: 10px;">
+                <h2>${param.title}</h2>
+                <p><strong>Date:</strong> ${param.date}</p>
+                <p><strong>Location:</strong> ${param.location}</p>
+                <p><strong>Description:</strong> ${param.description}</p>
+                <p><strong>Starting Price:</strong> ${param.price}</p>
                 
-                <!-- Link to Order Page -->
-                <div style="text-align: center; margin-top: 20px;">
-                     <a href="Order.jsp" class="buy-now-button">Order Tickets</a>
-                </div>
-               
+                <!-- Form to pass data to Order.jsp -->
+                <form action="Order.jsp" method="GET" style="text-align: center; margin-top: 20px;">
+                    <input type="hidden" name="title" value="${param.title}">
+                    <input type="hidden" name="date" value="${param.date}">
+                    <input type="hidden" name="location" value="${param.location}">
+                    <input type="hidden" name="description" value="${param.description}">
+                    <input type="hidden" name="price" value="${param.price}">
+                    <button type="submit" class="buy-now-button" style="padding: 10px 20px; background-color: #ff4d4d; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+                        Order Tickets
+                    </button>
+                </form>
             </div>
-            
         </div>
     </div>
     <div class="footer">
