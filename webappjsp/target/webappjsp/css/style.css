@@ -1,0 +1,865 @@
+:root{
+    --bg-light: #F1F0F0;
+    --bg-dark: #242221;
+    --neutral-color: #B2A8A8;
+    --font-primary: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+body {
+    font-family: var(--font-primary);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-color: hsl(0, 0%, 67%) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 1;
+}
+
+::-webkit-scrollbar-thumb{
+    height: 56px;
+    background-color: rgba(145, 131, 126, 0.5);
+    border-radius: 10px;
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.bg-fill{
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    position: fixed;
+    overflow: hidden;
+}
+
+.bg-loaded{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    filter: brightness(75%);
+    -webkit-filter: brightness(75%);
+}
+
+#video-bg {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1;
+    object-fit: fit;
+    filter: blur(2px);
+    opacity: 0.5;
+    -webkit-filter: blur(2px);
+}
+
+.navbar-pg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 80px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px 40px;
+    z-index: 1000;
+}
+
+/* New style for the logo */
+.header .logo {
+    height: 60px;
+    flex-shrink: 0;
+}
+
+#buy-now {
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    color: white;
+    /*defaultcolor*/background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.3s ease;
+    -webkit-transition: color 0.2s ease, background-color 0.3s ease;
+    -moz-transition: color 0.2s ease, background-color 0.3s ease;
+    -ms-transition: color 0.2s ease, background-color 0.3s ease;
+    -o-transition: color 0.2s ease, background-color 0.3s ease;
+}
+
+#buy-now:hover {
+    color: rgb(255, 147, 32); /* or background-color: ... */
+}
+
+.ul-header-list {
+    display: flex;
+    position: relative;
+    color: #ffffff;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0 auto; /* Center the list horizontally */
+}
+
+.ul-header-list li {
+    position: relative;
+    padding: 10px 30px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+}
+
+.ul-header-list li::before{
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    border-bottom: solid 4px rgb(255, 147, 32);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s;
+    -webkit-transition: transform 0.3s;
+    -moz-transition: transform 0.3s;
+    -ms-transition: transform 0.3s;
+    -o-transition: transform 0.3s;
+}
+
+.ul-header-list li:hover::before {
+    color: rgb(255, 147, 32);
+    transform: scaleX(.8);
+    -webkit-transform: scaleX(.8);
+    -moz-transform: scaleX(.8);
+    -ms-transform: scaleX(.8);
+    -o-transform: scaleX(.8);
+}
+
+.content {
+    display: block;
+    flex: 1;
+    text-align: center;
+    padding-bottom: 100px; /* Add padding to the bottom */
+}
+
+::placeholder {
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+}
+
+input:focus {
+    outline: none;
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 20px 0;
+}
+
+.search-form {
+    width: 90%;
+    max-width: 800px;
+    padding: 18px 0;
+}
+
+.search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 15px 50px 15px 20px;
+    font-size: 18px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 500;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: rgb(255, 147, 32);
+    box-shadow: 0 0 10px rgba(255, 147, 32, 0.3);
+    background-color: #fff;
+}
+
+.search-bar input::placeholder {
+    color: #666;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.search-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+.search-button:hover {
+    color: rgb(255, 147, 32);
+}
+
+.search-button svg {
+    width: 24px;
+    height: 24px;
+}
+
+.flex-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.event-title {
+    text-align: center;
+    font-size: 36px;
+    text-shadow: 4px 2px 2px rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+    font-family: var(--font-primary);
+    font-weight: 600;
+    margin-bottom: 20px; /* Add some space below the title */
+}
+
+.search-info {
+    text-align: center;
+    color: #fff;
+    margin-bottom: 0;
+    font-size: 1.2em;
+    font-weight: bold; /* Make the text bold */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Add a subtle text shadow */
+}
+
+.box-id {
+    display: flex;
+    /* Horizontal Scrolling Layout (Default) */
+    flex-direction: row;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    overflow-y: hidden; /* Hide vertical scrollbar */
+    white-space: nowrap; /* Prevent items from wrapping */
+    align-items: center; /* Center items vertically */
+    justify-content: flex-start; /* Align items to the start */
+    padding: 20px; /* Add padding for scrolling */
+    
+    /* Vertical Scrolling Layout (Uncomment the lines below and comment the horizontal ones above to switch) */
+    /* flex-direction: column; */
+    /* overflow-x: hidden; */
+    /* overflow-y: auto; */
+    /* align-items: center; */ /* Center items horizontally */
+    /* justify-content: center; */ /* Center items */
+    /* white-space: normal; */ /* Allow items to wrap */
+    /* padding: 20px 0; */ /* Adjust padding for vertical layout */
+
+    list-style-type: none;
+    flex-wrap: nowrap; /* Prevent wrapping in horizontal mode */
+    /* flex-wrap: wrap; */ /* Allow wrapping in vertical mode */
+    gap: 40px; /* Space between cards */
+    margin: 20px auto; /* Center the container */
+    max-width: 1200px; /* Max width for the container */
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: #ff4d4d transparent; /* For Firefox */
+}
+
+/* Custom scrollbar for Webkit browsers */
+.box-id::-webkit-scrollbar {
+    height: 8px; /* Height of the scrollbar */
+}
+
+.box-id::-webkit-scrollbar-thumb {
+    background-color: #ff4d4d; /* Color of the scrollbar thumb */
+    border-radius: 4px; /* Roundness of the scrollbar thumb */
+}
+
+.box-id::-webkit-scrollbar-track {
+    background: transparent; /* Color of the scrollbar track */
+}
+
+.box-id li {
+    position: relative;
+    /* Card Dimensions for Horizontal Layout */
+    flex: 0 0 auto; /* Prevent shrinking/growing, basis auto */
+    width: 300px; /* Fixed width */
+    height: 200px; /* Increased height for more descriptive content */
+
+    /* Card Dimensions for Vertical Layout (Uncomment below and comment above) */
+    /* flex: 1 1 auto; */
+    /* width: 80%; */ /* Responsive width */
+    /* max-width: 400px; */ /* Max width */
+    /* height: auto; */ /* Auto height */
+    /* margin: 10px auto; */ /* Center cards in vertical layout */
+
+    padding: 0; /* No padding on li */
+    border-radius: 10px; /* Slightly less rounded */
+    overflow: hidden; /* Keep overflow hidden */
+    font-size: 16px; /* Adjusted font size */
+    font-family: var(--font-primary);
+    font-weight: normal; /* Normal font weight for better readability */
+    text-shadow: none; /* Removed text shadow */
+    box-shadow: none; /* Removed box shadow */
+    background-size: cover;
+    background-position: center;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Added box-shadow to transition */
+    cursor: pointer;
+
+    /* Card Body Styles */
+    background-color: #ffffff; /* White background */
+    border: 2px solid #ff4d4d; /* Pink border */
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    align-items: flex-start; /* Align content to the start */
+    justify-content: flex-start; /* Align content to the start vertically */
+    white-space: normal; /* Allow text wrapping */
+    color: #333; /* Default text color */
+    padding: 15px; /* Padding inside the card */
+}
+
+.box-id li::before {
+    content: '';
+    position: absolute;
+    /* Position below the card */
+    bottom: -15px; 
+    left: 10px; /* Offset to the right */
+    width: calc(100% - 10px); /* Adjust width */
+    height: 20px; /* Height of the dotted layer */
+    background-image: radial-gradient(circle, #ff4d4d 1px, transparent 1px);
+    background-size: 5px 5px;
+    transition: background-image 0.3s ease;
+    z-index: -1; /* Place behind the card */
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.box-id li:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow on hover */
+    background-color: #ff4d4d; /* Pink background on hover */
+    border-color: #00bfff; /* Blue border on hover */
+    color: #ffffff; /* White text on hover */
+}
+
+.box-id li:hover::before {
+    background-image: radial-gradient(circle, #00bfff 1px, transparent 1px); /* Blue dots on hover */
+}
+
+.card-content {
+    position: static; /* Position normally within the flex container */
+    padding: 0; /* Removed padding here, added to li */
+    background: none; /* Removed background */
+    color: inherit; /* Inherit color from parent li */
+    transform: none; /* Removed transform */
+    transition: color 0.3s ease; /* Transition for text color */
+    display: flex;
+    flex-direction: column; /* Stack content vertically within card-content */
+    align-items: flex-start; /* Align content to the start */
+    justify-content: flex-start; /* Align content to the start vertically */
+    height: 100%; /* Full height */
+    pointer-events: auto; /* Enable pointer events */
+    width: 100%; /* Full width */
+    white-space: normal; /* Allow text wrapping */
+}
+
+/* Remove background images from list items */
+.box-id .main-event-1,
+.box-id .main-event-2,
+.box-id .main-event-3 {
+    background-image: none;
+    /* background-color is set by the .box-id li style */
+}
+
+.card-content h3 {
+    margin: 0 0 5px 0; /* Adjusted margin */
+    font-size: 18px; /* Adjusted font size */
+    font-weight: bold; /* Bold font weight */
+    text-align: left; /* Align text left */
+    font-family: var(--font-primary);
+    opacity: 1; /* Always visible */
+    transform: none; /* Removed transform */
+    transition: color 0.3s ease; /* Transition for h3 color */
+    color: inherit; /* Inherit color from parent li */
+}
+
+.card-content .date,
+.card-content .location {
+    display: block; /* Show date and location */
+    margin: 2px 0; /* Adjusted margin */
+    font-size: 14px; /* Adjusted font size */
+    opacity: 0.9;
+    width: 100%;
+    text-align: left;
+    font-family: var(--font-primary);
+    color: inherit; /* Inherit color from parent li */
+}
+
+.card-content .description {
+    display: block; /* Show description */
+    margin: 8px 0 0 0; /* Adjusted margin */
+    font-size: 12px; /* Adjusted font size */
+    line-height: 1.4;
+    opacity: 0.9;
+    width: 100%;
+    text-align: left;
+    font-family: var(--font-primary);
+    color: inherit; /* Inherit color from parent li */
+}
+
+.price-tag {
+    position: static; /* Position normally */
+    padding: 0; /* Removed padding */
+    background-color: transparent; /* Transparent background */
+    color: inherit; /* Inherit color from parent li */
+    font-size: 16px; /* Adjusted font size */
+    font-weight: bold; /* Bold font weight */
+    border-radius: 0; /* Removed border radius */
+    display: inline-block;
+    opacity: 1; /* Always visible */
+    transform: none; /* Removed transform */
+    transition: color 0.3s ease; /* Transition for color */
+    cursor: pointer;
+    border: none; /* Removed border */
+    font-family: var(--font-primary);
+    text-align: right; /* Align text right */
+    margin-top: 10px; /* Add space above price tag */
+    white-space: nowrap; /* Prevent wrapping */
+    align-self: flex-end; /* Align to the end of the flex container */
+}
+
+.price-tag::after {
+    content: ' →'; /* Add arrow */
+}
+
+.price-tag:hover {
+    background-color: transparent; /* Keep background transparent on hover */
+    color: #00bfff; /* Blue color on hover */
+    transform: none; /* Removed transform on hover */
+    border-color: transparent; /* Keep border transparent on hover */
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally within the footer */
+    width: 100%;
+    background-color: #1a1a1a;
+    color: #ccc;
+    font-family: var(--font-primary);
+    font-size: 10px;
+    padding: 10px 0;
+}
+
+.ul-footer-list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 0 20px;
+    margin: 0 auto; /* Center the list horizontally */
+    list-style-type: none;
+    width: 100%;
+    max-width: 900px;
+    text-align: left;
+}
+
+.ul-footer-list li.name-category {
+    margin: 0 10px 10px 10px;
+    position: relative;
+    min-width: 100px;
+    flex-basis: 150px;
+    flex-grow: 1;
+}
+
+.ul-footer-list .name-category h4 {
+    font-size: 11px;
+    margin: 0 0 5px 0;
+    color: white;
+    font-weight: 600;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.name-list {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.name-list li {
+    padding: 2px 0;
+    line-height: 1.4;
+}
+
+.name-list a {
+    display: inline-block;
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.name-list a:hover {
+    color: #ffffff;
+}
+
+.name-list img {
+    display: inline-block;
+    margin-right: 3px;
+    vertical-align: middle;
+    height: 10px;
+}
+
+.footer-copyright {
+    text-align: center;
+    font-size: 8px;
+    color: #888;
+    padding-top: 5px;
+    width: 100%;
+    max-width: 900px;
+    margin-top: 5px;
+}
+
+@font-face {
+    font-family: 'KozukaGothicPro-Light';
+    src: url('/Web-project/navbar-pg/Font//kozuka-gothic-pro/KozGoPro-ExtraLight.otf') format('opentype');
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'KozukaGothicPro-Bold';
+    src: url('/Web-project/navbar-pg/Font//kozuka-gothic-pro/KozGoPro-Bold.otf') format('opentype');
+}
+
+.order-body {
+    background-color: #000000;
+}
+
+.order-container {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 30px; /* Increased padding */
+    border-radius: 10px;
+    color: white;
+    max-width: 700px; /* Slightly reduced max-width */
+    margin: 40px auto; /* Increased margin */
+}
+
+.ticket-options {
+    margin: 30px 0; /* Increased margin */
+}
+
+.ticket-options h3 {
+    margin-bottom: 20px; /* Increased margin below heading */
+    color: #ff4d4d; /* Highlight heading */
+    text-align: center; /* Center the heading */
+}
+
+.ticket-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px; /* Increased padding */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 18px; /* Adjusted font size */
+}
+
+.ticket-item:last-child {
+    border-bottom: none; /* Remove border from last item */
+}
+
+.ticket-info h4 {
+    margin: 0;
+    font-size: 20px; /* Adjusted font size */
+    color: #fff; /* White color for ticket name */
+}
+
+.ticket-info p {
+    margin: 5px 0 0 0; /* Adjusted margin */
+    font-size: 16px; /* Adjusted font size */
+    color: rgba(255, 255, 255, 0.8); /* Slightly transparent price color */
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Reduced gap */
+}
+
+.quantity-control button {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 12px; /* Adjusted padding for button size */
+    border-radius: 5px; /* Slightly more rounded */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px; /* Adjusted font size */
+    line-height: 1; /* Ensure consistent height */
+}
+
+.quantity-control button:hover {
+    background: #ff3333;
+}
+
+.quantity-control input[type="number"] {
+    width: 60px; /* Adjusted width */
+    text-align: center;
+    padding: 8px 5px; /* Adjusted padding */
+    border: 1px solid #ddd;
+    border-radius: 5px; /* Slightly more rounded */
+    background: rgba(255, 255, 255, 0.9);
+    transition: border-color 0.3s ease;
+    font-size: 16px; /* Adjusted font size */
+    /* -moz-appearance: textfield; Hide Firefox spinner */
+}
+
+/* Hide Chrome, Safari, Edge, Opera spinner */
+.quantity-control input::-webkit-outer-spin-button,
+.quantity-control input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.form-group {
+    margin-bottom: 20px; /* Increased margin */
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px; /* Increased margin */
+    color: #fff;
+    font-weight: 600; /* Slightly bolder label */
+    font-size: 16px; /* Adjusted font size */
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"] {
+    width: calc(100% - 16px); /* Adjusted width for padding */
+    padding: 12px 8px; /* Increased padding */
+    border-radius: 5px; /* Slightly more rounded */
+    border: 1px solid #ddd;
+    background: rgba(255, 255, 255, 0.95); /* Slightly more opaque background */
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    font-size: 16px; /* Adjusted font size */
+}
+
+.form-group input:focus {
+    border-color: #ff4d4d;
+    background-color: #fff; /* White background on focus */
+    outline: none;
+    box-shadow: 0 0 8px rgba(255, 77, 77, 0.4); /* Add subtle shadow on focus */
+}
+
+.order-summary {
+    margin-top: 30px; /* Increased margin */
+    padding: 20px; /* Increased padding */
+    background: rgba(255, 255, 255, 0.15); /* Slightly more opaque background */
+    border-radius: 8px; /* More rounded */
+}
+
+.order-summary h3 {
+    color: #ff4d4d; /* Highlight heading */
+    margin-bottom: 15px; /* Increased margin */
+    text-align: center; /* Center the heading */
+}
+
+.order-summary p {
+    margin: 8px 0; /* Adjusted margin */
+    color: #fff;
+    font-size: 16px; /* Adjusted font size */
+}
+
+.order-summary strong {
+    color: #00bfff; /* Highlight total */
+    font-size: 18px; /* Slightly larger total font size */
+}
+
+.buy-now-button {
+    display: block; /* Make button a block element */
+    width: 80%; /* Set width */
+    max-width: 300px; /* Set max-width */
+    margin: 30px auto 0 auto; /* Center the button and add top margin */
+    padding: 12px 20px; /* Adjusted padding */
+    background-color: #ff4d4d;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Added transform transition */
+    font-size: 18px; /* Adjusted font size */
+    text-align: center; /* Center text */
+}
+
+.buy-now-button:hover {
+    background-color: #ff3333;
+    transform: translateY(-2px); /* Slight lift on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow on hover */
+}
+
+/* Concert Details Page Styles */
+.concert-details-container {
+    color: white;
+    text-align: left;
+    max-width: 800px;
+    margin: 20px auto;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 30px; /* Increased padding */
+    border-radius: 10px;
+}
+
+.concert-details-container h2 {
+    color: #ff4d4d; /* Highlight heading */
+    margin-bottom: 20px; /* Increased margin */
+    text-align: center; /* Center heading */
+}
+
+.concert-details-container p {
+    margin: 10px 0; /* Adjusted margin */
+    color: #fff;
+    font-size: 16px; /* Adjusted font size */
+    line-height: 1.5; /* Improved line height */
+}
+
+.concert-details-container strong {
+    color: #00bfff; /* Highlight labels */
+}
+
+.concert-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 40px 20px;
+    width: 800px; /* Increased width to accommodate side-by-side layout */
+    transition: transform 0.3s ease;
+    display: flex; /* Changed to flex to allow side-by-side layout */
+    flex-direction: row; /* Arrange items horizontally */
+    align-items: stretch; /* Make items stretch to fill the container height */
+}
+
+.concert-card:hover {
+    transform: translateY(-5px);
+}
+
+.concert-card img {
+    width: 300px; /* Fixed width for image */
+    height: auto; /* Allow height to adjust based on content */
+    object-fit: cover;
+    flex-shrink: 0; /* Prevent image from shrinking */
+}
+
+.concert-info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1; /* Take remaining space */
+    justify-content: space-between; /* Space between content and button */
+}
+
+.concert-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1; /* Take remaining space */
+}
+
+.concert-info h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.5em;
+}
+
+.concert-info p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.concert-info .description {
+    color: #555;
+    font-size: 0.9em;
+    line-height: 1.4;
+    margin: 10px 0;
+    display: block;
+    flex: 1;
+}
+
+.concert-info .buy-now-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: rgb(255, 147, 32);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: auto; /* Push button to bottom */
+    transition: background-color 0.3s ease;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.concert-info .buy-now-button:hover {
+    background-color: rgb(230, 132, 28);
+}
+
+#concertSearch {
+    width: 80%; /* Adjust width */
+    max-width: 600px; /* Set a max-width */
+    padding: 10px;
+    margin: 20px auto; /* Center the input */
+    display: block; /* Make it a block element for margin: auto to work */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
