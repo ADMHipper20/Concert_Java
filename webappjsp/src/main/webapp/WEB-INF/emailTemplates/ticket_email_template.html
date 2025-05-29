@@ -6,42 +6,41 @@
     <title>Your Concert Ticket</title>
     <style>
         body {
-            font-family: sans-serif;
+            font-family: Arial, sans-serif;
             line-height: 1.6;
             color: #333;
             margin: 0;
             padding: 20px;
-            background-color: #f4f4f4; /* Light grey background */
+            background-color: #f4f4f4;
         }
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: #fff; /* White content background */
-            padding: 0; /* Remove padding here, add to inner sections */
+            background-color: #fff;
+            padding: 0;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden; /* Contains floated elements */
+            overflow: hidden;
         }
         .header {
-            width: 100%;
-            /* background-color: #your-header-bg-color; */ /* Optional header background color */
+            width: 100%%;
             text-align: center;
         }
         .header img {
-            max-width: 100%; /* Make header image responsive */
+            max-width: 100%%;
             height: auto;
-            display: block; /* Remove extra space below image */
-            margin: 0 auto; /* Center image if smaller than container */
+            display: block;
+            margin: 0 auto;
         }
         .content-padding {
-             padding: 20px;
+            padding: 20px;
         }
         .logo {
             text-align: center;
             padding: 20px 0;
         }
         .logo img {
-            max-width: 150px; /* Adjust logo size */
+            max-width: 150px;
             height: auto;
         }
         .body-content {
@@ -52,45 +51,56 @@
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
+            background-color: #fafafa;
         }
         .ticket-details h3 {
             margin-top: 0;
-            color: #e44d26; /* Accent color */
-            border-bottom: 1px solid #eee;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
             padding-bottom: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
-         .ticket-details p {
-            margin: 8px 0;
+        .ticket-details p {
+            margin: 10px 0;
+            font-size: 14px;
         }
         .ticket-details strong {
-            color: #333;
+            color: #2c3e50;
+            font-weight: 600;
         }
         .concert-info {
             display: flex;
-            align-items: center; /* Align items vertically */
-            margin-bottom: 20px; /* Space below concert info */
+            align-items: center;
+            margin-bottom: 20px;
         }
-         .concert-info img {
-            max-width: 150px; /* Adjust concert image size */
+        .concert-image {
+            flex-shrink: 0;
+            margin-right: 20px;
+        }
+        .concert-image img {
+            max-width: 150px;
             height: auto;
-            margin-right: 20px; /* Space between image and text */
             border-radius: 8px;
         }
-         .concert-details-text {
-            flex-grow: 1; /* Allow text to take remaining space */
+        .concert-details-text {
+            flex-grow: 1;
+            margin-top: 0;
         }
-         .concert-details-text h4 {
+        .concert-details-text h4 {
             margin-top: 0;
             margin-bottom: 10px;
-            color: #333;
+            color: #2c3e50;
         }
-         .qr-code {
+        .qr-code {
             text-align: center;
-            margin-top: 20px;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            border: 1px solid #eee;
         }
         .qr-code img {
-            max-width: 150px; /* Adjust QR code image size */
+            max-width: 150px;
             height: auto;
         }
         .footer {
@@ -101,20 +111,20 @@
             font-size: 0.9em;
             color: #777;
         }
+        .highlight {
+            color: #e74c3c;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <!-- Main Email Banner/Image -->
-            <!-- Replace src with the URL of your hosted main email image -->
             <img src="YOUR_MAIN_BANNER_IMAGE_URL" alt="Concert Banner">
         </div>
 
         <div class="content-padding">
             <div class="logo">
-                <!-- Your Logo -->
-                <!-- Replace src with the URL of your hosted logo image -->
                 <img src="YOUR_LOGO_IMAGE_URL" alt="CoNEX Logo">
             </div>
 
@@ -125,26 +135,25 @@
                 <div class="ticket-details">
                     <h3>Order Details</h3>
                     <div class="concert-info">
-                        <!-- Concert Image -->
-                        <!-- Replace src with the URL of the hosted image for the specific concert -->
-                        <img src="YOUR_CONCERT_IMAGE_URL" alt="Concert Image">
+                        <div class="concert-image">
+                            <img src="%s" alt="Concert Image">
+                        </div>
                         <div class="concert-details-text">
                             <p><strong>Concert:</strong> %s</p>
+                            <p><strong>Artist:</strong> %s</p>
+                            <p><strong>Genre:</strong> %s</p>
                             <p><strong>Date:</strong> %s</p>
                             <p><strong>Location:</strong> %s</p>
-                            <p><strong>Amount Paid:</strong> Rp %s</p>
+                            <p><strong>Amount Paid:</strong> <span class="highlight">%s</span></p>
                         </div>
                     </div>
                 </div>
 
                 <div class="ticket-details">
                     <h3>Ticket Information</h3>
-                    <p><strong>Ticket ID:</strong> %s</p>
+                    <p><strong>Ticket ID:</strong> <span class="highlight">%s</span></p>
                     <div class="qr-code">
-                        <!-- Ticket QR Code Image -->
-                        <!-- You will need to generate the QR code for the ticket ID and host it,
-                             or embed it in the email. Replace src with the URL if hosted. -->
-                        <img src="YOUR_TICKET_QR_CODE_IMAGE_URL" alt="Ticket QR Code">
+                        <img src="%s" alt="Ticket QR Code">
                     </div>
                 </div>
 
@@ -155,7 +164,7 @@
         </div>
 
         <div class="footer">
-            <p>&copy; 2025 Concert Ticket System. All rights reserved.</p>
+            <p>&copy; 2024 Concert Ticket System. All rights reserved.</p>
         </div>
     </div>
 </body>

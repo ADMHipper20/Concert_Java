@@ -20,13 +20,15 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import javax.imageio.ImageIO;
 import java.util.Base64;
+import java.sql.SQLException;
+import com.webappjsp.utils.jdbc;
 
 @WebServlet("/xendit-payment")
 public class XenditPaymentServlet extends HttpServlet {
     
     private static final String XENDIT_API_KEY = "xnd_development_pYMoDCLv5FCoaYkksZhBfkHo60p6jr0eRn08dlpD0OCgSD1iT0gQwOVidg"; // Replace with your actual API key
     // Update this URL whenever you restart ngrok
-    private static final String NGROK_BASE_URL = "https://bcbb-149-108-98-65.ngrok-free.app";
+    private static final String NGROK_BASE_URL = "https://precisely-included-killdeer.ngrok-free.app";
     
     @Override
     public void init() throws ServletException {
@@ -37,7 +39,7 @@ public class XenditPaymentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String paymentMethod = request.getParameter("paymentMethod");
-        String amount = request.getParameter("amount");
+        String amount = request.getParameter("totalAmount");
         String title = request.getParameter("title");
         String customerName = request.getParameter("name");
         String customerEmail = request.getParameter("email");
@@ -115,25 +117,82 @@ public class XenditPaymentServlet extends HttpServlet {
                 params.put("name", customerName);
                 params.put("expected_amount", Long.parseLong(amount));
                 params.put("is_closed", true);
-                // Add expiration date if needed, format depends on Xendit API version
-                // params.put("expiration_date", "2024-12-31T23:59:59Z");
+                params.put("currency", "IDR");
+                params.put("callback_url", NGROK_BASE_URL + "/payment-callback");
 
-                // Use createClosed method for fixed VA
-                FixedVirtualAccount virtualAccount = FixedVirtualAccount.createClosed(params);
-                
-                // Pass VA data to display page via request attributes or session
-                request.setAttribute("vaNumber", virtualAccount.getAccountNumber());
-                request.setAttribute("bankCode", virtualAccount.getBankCode());
-                request.setAttribute("amount", virtualAccount.getExpectedAmount());
-                // Assuming Xendit response includes expiry date, add it here
-                // request.setAttribute("expiryDate", virtualAccount.getExpirationDate()); 
-                request.setAttribute("customerName", customerName);
-                request.setAttribute("title", title);
-                request.setAttribute("ticketId", ticketId);
+                try {
+                    // Use createClosed method for fixed VA
+                    FixedVirtualAccount virtualAccount = FixedVirtualAccount.createClosed(params);
+                    
+                    // Debug: Print all available fields and their values
+                    System.out.println("=== Virtual Account Response Details ===");
+                    System.out.println("All fields: " + virtualAccount.toString());
+                    System.out.println("ID: " + virtualAccount.getId());
+                    System.out.println("Account Number: " + virtualAccount.getAccountNumber());
+                    System.out.println("Bank Code: " + virtualAccount.getBankCode());
+                    System.out.println("Expected Amount: " + virtualAccount.getExpectedAmount());
+                    System.out.println("Status: " + virtualAccount.getStatus());
+                    System.out.println("Owner ID: " + virtualAccount.getOwnerId());
+                    System.out.println("External ID: " + virtualAccount.getExternalId());
+                    System.out.println("Merchant Code: " + virtualAccount.getMerchantCode());
+                    System.out.println("=== End Virtual Account Details ===");
+                    
+                    if (virtualAccount.getStatus() == null || 
+                        (!virtualAccount.getStatus().equals("ACTIVE") && !virtualAccount.getStatus().equals("PENDING"))) {
+                        throw new XenditException("Virtual Account creation failed or invalid status: " + virtualAccount.getStatus());
+                    }
+                    
+                    // Store the Virtual Account ID in session for later use
+                    request.getSession().setAttribute("virtualAccountId", virtualAccount.getId());
+                    
+                    // === Save Order to Database ===
+                    try (jdbc db = new jdbc()) {
+                        // You will need to adapt this call to match your saveOrder method signature
+                        // Ensure you are passing the correct parameters including ticketCount and totalAmount
+                        // Assuming you have ticketCount available from the request parameters
+                        String ticketCountStr = request.getParameter("ticketCount");
+                        int ticketCount = 1; // Default to 1 if ticketCount is not available
+                        if (ticketCountStr != null) {
+                            try {
+                                ticketCount = Integer.parseInt(ticketCountStr);
+                            } catch (NumberFormatException e) {
+                                System.err.println("Invalid ticket count format: " + ticketCountStr);
+                            }
+                        }
+                        
+                        String artist = request.getParameter("artist");
+                        String genre = request.getParameter("genre");
+                        String date = request.getParameter("date");
+                        String location = request.getParameter("location");
+                        long totalAmount = Long.parseLong(amount);
 
-                // Forward to display VA details page
-                request.getRequestDispatcher("displayVADetails.jsp").forward(request, response);
-                
+                        db.saveOrder(ticketId, title, date, location, totalAmount, artist, genre, paymentMethod, ticketCount, customerName, customerEmail, request.getParameter("phone"), paymentMethod);
+                        System.out.println("Order saved to database with Ticket ID: " + ticketId + ", Total Amount: " + totalAmount + ", Quantity: " + ticketCount);
+                    } catch (SQLException e) {
+                        System.err.println("Database error saving order for VA: " + e.getMessage());
+                        e.printStackTrace();
+                        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to save order details for VA.");
+                        return;
+                    }
+                    // === End Save Order ===
+
+                    // Pass VA data to display page via request attributes or session
+                    request.setAttribute("vaNumber", virtualAccount.getAccountNumber());
+                    request.setAttribute("bankCode", virtualAccount.getBankCode());
+                    request.setAttribute("amount", virtualAccount.getExpectedAmount());
+                    // Assuming Xendit response includes expiry date, add it here
+                    // request.setAttribute("expiryDate", virtualAccount.getExpirationDate()); 
+                    request.setAttribute("customerName", customerName);
+                    request.setAttribute("title", title);
+                    request.setAttribute("ticketId", ticketId);
+
+                    // Forward to display VA details page
+                    request.getRequestDispatcher("displayVADetails.jsp").forward(request, response);
+                    
+                } catch (XenditException e) {
+                    e.printStackTrace(); // Log the full exception for debugging
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error creating payment: " + e.getMessage());
+                }
             } else {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unsupported payment method: " + paymentMethod);
             }

@@ -91,7 +91,7 @@
                 color: #e44d26;
                 text-align: right;
                 margin: 20px 0;
-                padding: 15px;
+                padding: 30px;
                 background: #fff5f2;
                 border-radius: 8px;
                 font-weight: bold;
@@ -238,6 +238,8 @@
                         <input type="hidden" name="name" value="<%= request.getParameter("customerName") %>">
                         <input type="hidden" name="email" value="<%= request.getParameter("customerEmail") %>">
                         <input type="hidden" name="phone" value="<%= request.getParameter("customerPhone") %>">
+                        <input type="hidden" name="artist" value="<%= artist %>">
+                        <input type="hidden" name="genre" value="<%= genre %>">
                         
 
                         <div class="order-info">
@@ -259,19 +261,18 @@
                             <label>Ticket Type:</label>
                             <div><%= ticketType != null ? ticketType : "Regular" %></div>
                             
-                            <label>Price per ticket:</label>
-                            <div>Rp <%= String.format("%,.0f", basePrice) %></div>
+                            <label>Price per Ticket:</label>
+                            <div>Rp <span id="basePriceValue"><%= price %></span></div>
                             
-                            <label>Number of tickets:</label>
+                            <label>Quantity:</label>
                             <div class="ticket-count">
-                                <button type="button" onclick="updateTicketCount(-1)">-</button>
-                                <input type="number" id="ticketCount" value="1" min="1" max="2" onchange="updateTotal()">
-                                <button type="button" onclick="updateTicketCount(1)">+</button>
+                                <button type="button" id="decrementBtn">-</button>
+                                <input type="number" id="ticketCountInput" name="ticketCount" value="1" min="1" max="2" readonly>
+                                <button type="button" id="incrementBtn">+</button>
                             </div>
-                        </div>
 
-                        <div class="total-amount">
-                            Total Amount: Rp <span id="totalPrice"><%= String.format("%,.0f", totalPrice) %></span>
+                            <label>Total Amount:</label>
+                            <div class="total-amount">Rp <span id="totalPriceValue"><%= (long)totalPrice %></span></div>
                         </div>
 
                         <div class="payment-methods">
@@ -323,7 +324,7 @@
                         <input type="hidden" name="genre" value="<%= genre %>">
                         <input type="hidden" name="ticketType" value="<%= ticketType %>">
                         <input type="hidden" name="ticketCount" id="hiddenTicketCount" value="<%= ticketCount %>">
-                        <input type="hidden" name="amount" id="hiddenTotalAmount" value="<%= (long) totalPrice %>">
+                        <input type="hidden" name="totalAmount" id="hiddenTotalAmount" value="<%= (long) totalPrice %>">
 
                         <div class="form-group">
                             <label for="name">Full Name:</label>
@@ -342,7 +343,7 @@
 
                         <input type="hidden" name="paymentMethod" id="selectedPaymentMethod">
 
-                        <button type="submit" class="confirm-button">Confirm Order</button>
+                        <button type="submit" class="confirm-button">Proceed to Payment</button>
                     </div>
                 </form>
             </div>
@@ -390,11 +391,14 @@
             // Initialize variables
             let selectedPayment = null;
             const orderForm = document.getElementById('orderForm');
-            const ticketCountInput = document.getElementById('ticketCount');
+            const ticketCountInput = document.getElementById('ticketCountInput');
             const hiddenTicketCountInput = document.getElementById('hiddenTicketCount');
-            const totalPriceSpan = document.getElementById('totalPrice');
+            const totalPriceSpan = document.getElementById('totalPriceValue');
             const selectedPaymentMethodInput = document.getElementById('selectedPaymentMethod');
             const hiddenAmountInput = document.getElementById('hiddenTotalAmount');
+            const basePriceSpan = document.getElementById('basePriceValue');
+            const decrementBtn = document.getElementById('decrementBtn');
+            const incrementBtn = document.getElementById('incrementBtn');
 
             // Set initial hidden ticket count value
             hiddenTicketCountInput.value = ticketCountInput.value;
@@ -410,7 +414,7 @@
 
             function updateTotal() {
                 const ticketCount = parseInt(ticketCountInput.value);
-                const basePrice = parseFloat('<%= basePrice %>'); // Get base price from JSP
+                const basePrice = parseFloat(basePriceSpan.textContent);
                 const total = basePrice * ticketCount;
                 totalPriceSpan.textContent = total.toLocaleString('id-ID');
                 hiddenAmountInput.value = total; // Update hidden amount input
@@ -473,6 +477,31 @@
 
                 // The form will now submit with all necessary hidden fields populated
             });
+
+            const basePrice = parseFloat(basePriceSpan.textContent);
+
+            function updateTotalPrice() {
+                const ticketCount = parseInt(ticketCountInput.value);
+                const totalPrice = basePrice * ticketCount;
+                totalPriceSpan.textContent = totalPrice.toFixed(0); // Format as integer without decimal
+                hiddenAmountInput.value = totalPrice; // Update the hidden input value
+            }
+
+            decrementBtn.addEventListener('click', () => {
+                let count = parseInt(ticketCountInput.value);
+                if (count > 1) {
+                    ticketCountInput.value = count - 1;
+                    updateTotalPrice();
+                }
+            });
+
+            incrementBtn.addEventListener('click', () => {
+                let count = parseInt(ticketCountInput.value);
+                updateTicketCount(1);
+            });
+
+            // Initial calculation on page load
+            updateTotalPrice();
 
         </script>
     </body>

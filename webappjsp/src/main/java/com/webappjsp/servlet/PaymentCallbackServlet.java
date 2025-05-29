@@ -17,6 +17,7 @@ import jakarta.mail.MessagingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.io.InputStream;
 
 @WebServlet("/payment-callback")
 public class PaymentCallbackServlet extends HttpServlet {
@@ -52,13 +53,24 @@ public class PaymentCallbackServlet extends HttpServlet {
             String externalId;
 
             // Check if this is a QR code callback (has data object) or VA callback
-            if (payload.has("qr_code")) {
-                // QR Code callback
+            if (payload.has("data")) {
+                // Test webhook format
+                JSONObject data = payload.getJSONObject("data");
+                status = data.getString("status");
+                if (data.has("qr_id")) {
+                    // QR code test webhook
+                    externalId = data.getString("reference_id");
+                } else {
+                    // VA test webhook
+                    externalId = data.getString("external_id");
+                }
+            } else if (payload.has("qr_code")) {
+                // Real QR Code callback
                 JSONObject qrCode = payload.getJSONObject("qr_code");
                 status = payload.getString("status");
                 externalId = qrCode.getString("external_id");
             } else if (payload.has("external_id")) {
-                // Virtual Account callback
+                // Real Virtual Account callback
                 status = "PAID"; // VA callbacks only come when payment is successful
                 externalId = payload.getString("external_id");
             } else {
@@ -74,13 +86,32 @@ public class PaymentCallbackServlet extends HttpServlet {
                     // Get order details for email and success page
                     Map<String, String> orderDetails = db.getOrderDetails(externalId);
                     if (orderDetails != null) {
+                        // Determine the resource path for the concert image
+                        String concertTitle = orderDetails.get("title");
+                        // Construct image file name based on convention (adjust if your naming differs)
+                        String imageFileName = concertTitle.replace(" ", "_").replace("~", "-").replace(":", "").replace(",", "").replace("'", "").replace("(", "").replace(")", "") + ".jpeg"; 
+                        String imageResourcePath = "/Images/Concerts/" + imageFileName;
+                        
+                        // Get the image as an InputStream
+                        InputStream concertImageStream = getServletContext().getResourceAsStream(imageResourcePath);
+
+                        // Check if the image stream was found
+                        if (concertImageStream == null) {
+                             System.err.println("Concert image resource not found: " + imageResourcePath);
+                             // Optionally, you might want to use a default image or skip embedding
+                        }
+
                         // Send confirmation email
                         String customerEmail = orderDetails.get("customer_email");
                         if (customerEmail != null) {
                             try {
-                                EmailUtil.sendTicketEmail(customerEmail, externalId, orderDetails);
+                                System.out.println("Ticket ID for email: " + externalId);
+                                System.out.println("Order details for email: " + orderDetails);
+                                System.out.println("Concert image resource path: " + imageResourcePath); // Log the path
+                                // Pass the image stream to EmailUtil
+                                EmailUtil.sendTicketEmail(customerEmail, externalId, orderDetails, concertImageStream);
                                 System.out.println("Ticket email sent to " + customerEmail);
-                            } catch (MessagingException e) {
+                            } catch (MessagingException | IOException e) {
                                 System.err.println("Failed to send ticket email: " + e.getMessage());
                                 e.printStackTrace();
                             }

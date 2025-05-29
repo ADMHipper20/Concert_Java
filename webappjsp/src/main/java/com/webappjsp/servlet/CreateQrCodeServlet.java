@@ -6,8 +6,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+// import java.net.URLEncoder;
+// import java.nio.charset.StandardCharsets;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -26,7 +26,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+// import com.google.gson.JsonParser;
 import com.webappjsp.utils.jdbc;
 import java.sql.SQLException;
 
@@ -37,7 +37,7 @@ public class CreateQrCodeServlet extends HttpServlet {
     // Assume you have a way to get your Xendit Secret Key and Callback URL
     private static final String XENDIT_SECRET_KEY = "xnd_development_pYMoDCLv5FCoaYkksZhBfkHo60p6jr0eRn08dlpD0OCgSD1iT0gQwOVidg"; // Replace with your test secret key
     private static final String XENDIT_QR_CREATE_URL = "https://api.xendit.co/qr_codes";
-    private static final String YOUR_CALLBACK_URL = "https://bcbb-149-108-98-65.ngrok-free.app/webappjsp/payment-callback"; // Replace with your ngrok URL for PaymentCallbackServlet
+    private static final String YOUR_CALLBACK_URL = "https://precisely-included-killdeer.ngrok-free.app/webappjsp/payment-callback"; // Replace with your ngrok URL for PaymentCallbackServlet
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -47,21 +47,25 @@ public class CreateQrCodeServlet extends HttpServlet {
         String title = request.getParameter("title");
         String date = request.getParameter("date");
         String location = request.getParameter("location");
-        String amountStr = request.getParameter("amount");
+        String amountStr = request.getParameter("totalAmount");
         String customerName = request.getParameter("name");
         String customerEmail = request.getParameter("email");
         String customerPhone = request.getParameter("phone");
         String paymentMethod = request.getParameter("paymentMethod");
         String ticketId = request.getParameter("ticketId");
+        String artist = request.getParameter("artist");
+        String genre = request.getParameter("genre");
+        String ticketCountStr = request.getParameter("ticketCount");
 
         // Basic validation
-        if (title == null || amountStr == null || customerName == null || customerEmail == null || paymentMethod == null) {
+        if (title == null || amountStr == null || customerName == null || customerEmail == null || paymentMethod == null || ticketCountStr == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing required parameters for QR code creation.");
             return;
         }
 
         try {
-            long amount = Long.parseLong(amountStr);
+            long totalAmount = Long.parseLong(amountStr);
+            int ticketCount = Integer.parseInt(ticketCountStr);
 
             // Generate QR code content
             String qrContent = String.format(
@@ -69,12 +73,13 @@ public class CreateQrCodeServlet extends HttpServlet {
                 "Date: %s\n" +
                 "Location: %s\n" +
                 "Amount: IDR %d\n" +
+                "Quantity: %d\n" +
                 "Customer: %s\n" +
                 "Email: %s\n" +
                 "Phone: %s\n" +
                 "Payment Method: %s\n" +
                 "Ticket ID: %s",
-                title, date, location, amount, customerName, customerEmail, customerPhone, paymentMethod, ticketId
+                title, date, location, totalAmount, ticketCount, customerName, customerEmail, customerPhone, paymentMethod, ticketId
             );
 
             // Generate QR code image (for display)
@@ -89,7 +94,7 @@ public class CreateQrCodeServlet extends HttpServlet {
             JsonObject xenditPayload = new JsonObject();
             xenditPayload.addProperty("external_id", ticketId);
             xenditPayload.addProperty("type", "DYNAMIC");
-            xenditPayload.addProperty("amount", amount);
+            xenditPayload.addProperty("amount", totalAmount);
             xenditPayload.addProperty("callback_url", YOUR_CALLBACK_URL);
 
             HttpRequest xenditRequest = HttpRequest.newBuilder()
@@ -113,8 +118,8 @@ public class CreateQrCodeServlet extends HttpServlet {
 
             // === Save Order to Database ===
             try (jdbc db = new jdbc()) {
-                db.saveOrder(ticketId, title, date, location, amount, "N/A", "N/A", "QRIS", 1, customerName, customerEmail, customerPhone, paymentMethod);
-                System.out.println("Order saved to database with Ticket ID: " + ticketId);
+                db.saveOrder(ticketId, title, date, location, totalAmount, artist, genre, "QRIS", ticketCount, customerName, customerEmail, customerPhone, paymentMethod);
+                System.out.println("Order saved to database with Ticket ID: " + ticketId + ", Total Amount: " + totalAmount + ", Quantity: " + ticketCount);
             } catch (SQLException e) {
                 System.err.println("Database error saving order: " + e.getMessage());
                 e.printStackTrace();
@@ -127,7 +132,7 @@ public class CreateQrCodeServlet extends HttpServlet {
             // Set QR code data as a request attribute (using the locally generated Base64 image)
             request.setAttribute("qrCodeImageBase64", qrCodeBase64);
             request.setAttribute("title", title);
-            request.setAttribute("amount", amount);
+            request.setAttribute("amount", totalAmount);
             request.setAttribute("customerName", customerName);
             request.setAttribute("ticketId", ticketId);
 

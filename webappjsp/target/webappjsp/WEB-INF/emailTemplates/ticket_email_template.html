@@ -1,0 +1,171 @@
+<!-- Email Template for Concert Ticket -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Your Concert Ticket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            width: 100%%;
+            text-align: center;
+        }
+        .header img {
+            max-width: 100%%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .content-padding {
+            padding: 20px;
+        }
+        .logo {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .logo img {
+            max-width: 150px;
+            height: auto;
+        }
+        .body-content {
+            margin-bottom: 20px;
+        }
+        .ticket-details {
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            background-color: #fafafa;
+        }
+        .ticket-details h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .ticket-details p {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        .ticket-details strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        .concert-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .concert-image {
+            flex-shrink: 0;
+            margin-right: 20px;
+        }
+        .concert-image img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 8px;
+        }
+        .concert-details-text {
+            flex-grow: 1;
+            margin-top: 0;
+        }
+        .concert-details-text h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .qr-code {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+        .qr-code img {
+            max-width: 150px;
+            height: auto;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            font-size: 0.9em;
+            color: #777;
+        }
+        .highlight {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="YOUR_MAIN_BANNER_IMAGE_URL" alt="Concert Banner">
+        </div>
+
+        <div class="content-padding">
+            <div class="logo">
+                <img src="YOUR_LOGO_IMAGE_URL" alt="CoNEX Logo">
+            </div>
+
+            <div class="body-content">
+                <p>Dear %s,</p>
+                <p>Thank you for your purchase! Here are your ticket details:</p>
+
+                <div class="ticket-details">
+                    <h3>Order Details</h3>
+                    <div class="concert-info">
+                        <div class="concert-image">
+                            <img src="%s" alt="Concert Image">
+                        </div>
+                        <div class="concert-details-text">
+                            <p><strong>Concert:</strong> %s</p>
+                            <p><strong>Artist:</strong> %s</p>
+                            <p><strong>Genre:</strong> %s</p>
+                            <p><strong>Date:</strong> %s</p>
+                            <p><strong>Location:</strong> %s</p>
+                            <p><strong>Amount Paid:</strong> <span class="highlight">%s</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ticket-details">
+                    <h3>Ticket Information</h3>
+                    <p><strong>Ticket ID:</strong> <span class="highlight">%s</span></p>
+                    <div class="qr-code">
+                        <img src="%s" alt="Ticket QR Code">
+                    </div>
+                </div>
+
+                <p>Please present your Ticket ID and/or QR code at the venue for entry.</p>
+
+                <p>Best regards,<br>Concert Ticket System</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2024 Concert Ticket System. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html> 

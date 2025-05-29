@@ -84,13 +84,14 @@ public class jdbc implements AutoCloseable {
     }
 
     public Map<String, String> getOrderDetails(String ticketId) throws SQLException {
-        String sql = "SELECT * FROM orders WHERE external_id = ?";
+        String sql = "SELECT external_id, concert_title, order_date, location, price, customer_name, customer_email, customer_phone, payment_method, artist, genre FROM orders WHERE external_id = ?";
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, ticketId);
         ResultSet rs = pstmt.executeQuery();
         
         if (rs.next()) {
             Map<String, String> orderDetails = new HashMap<>();
+            orderDetails.put("image_url", "src/main/webapp/Images/Concerts");
             orderDetails.put("title", rs.getString("concert_title"));
             orderDetails.put("date", rs.getString("order_date"));
             orderDetails.put("location", rs.getString("location"));
@@ -99,6 +100,8 @@ public class jdbc implements AutoCloseable {
             orderDetails.put("customer_email", rs.getString("customer_email"));
             orderDetails.put("customer_phone", rs.getString("customer_phone"));
             orderDetails.put("payment_method", rs.getString("payment_method"));
+            orderDetails.put("artist", rs.getString("artist"));
+            orderDetails.put("genre", rs.getString("genre"));
             return orderDetails;
         }
         return null;
