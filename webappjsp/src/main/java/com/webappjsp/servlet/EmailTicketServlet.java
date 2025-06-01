@@ -28,8 +28,8 @@ import java.net.URLDecoder;
 public class EmailTicketServlet extends HttpServlet {
     
     // TODO: Configure email properties securely
-    private static final String SENDER_EMAIL = "daniadinugroho@gmail.com"; // Replace with your email
-    private static final String SENDER_PASSWORD = "bqwq rpwk srdu avyn"; // Replace with your email password (use App Password for Gmail)
+    private static final String SENDER_EMAIL = "your_gmail_something@gmail.com"; // Replace with your email
+    private static final String SENDER_PASSWORD = ""; // Replace with your email password (use App Password for Gmail)
     private static final String SMTP_HOST = "smtp.gmail.com"; // Gmail SMTP Host
     private static final String SMTP_PORT = "587"; // Gmail SMTP TLS Port
 
