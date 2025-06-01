@@ -17,7 +17,7 @@ import java.util.Map;
 @WebServlet("/create-va")
 public class CreateVAServlet extends HttpServlet {
 
-    private static final String XENDIT_API_KEY = "xnd_development_pYMoDCLv5FCoaYkksZhBfkHo60p6jr0eRn08dlpD0OCgSD1iT0gQwOVidg"; // Replace with your actual API key
+    private static final String XENDIT_API_KEY = "xnd_development_"; // Replace with your actual API key
 
     @Override
     public void init() throws ServletException {
