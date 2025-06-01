@@ -35,7 +35,7 @@ _Notes:
 **Simulate QR-Codes (QR) Payment with CURL:**
 
 - curl -X POST
-        https://api.xendit.co/v2/qr_codes/[external_id or ID that represent the order]/payments/simulate
+        https://api.xendit.co/qr_codes/[external_id or ID that represent the order]/payments/simulate
       -u 'xnd_development_YOUR_SECRET_KEY:'
 
 _Notes:
