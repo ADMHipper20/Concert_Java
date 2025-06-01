@@ -43,5 +43,6 @@ _Notes:
 - The amount will just automated filled, then you should be able to recieve callbacks with 200 Succesful Response_
 
 **Ngrok:**
+- Deploy the static domain "ngrok http --url=precisely-included-killdeer.ngrok-free.app 80", so it won't make you change the randomsubdomain every times
 - https://precisely-included-killdeer.ngrok-free.app/**~folder_project~/payment-callback** (change with your own path for Callback)
 - put the URL before the path for your Callback URL
