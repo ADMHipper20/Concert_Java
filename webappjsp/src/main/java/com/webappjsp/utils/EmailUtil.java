@@ -22,10 +22,10 @@ import java.awt.image.BufferedImage;
 import java.io.InputStream;
 
 public class EmailUtil {
-    private static final String SMTP_HOST = "smtp.gmail.com";
-    private static final String SMTP_PORT = "587";
-    private static final String EMAIL_FROM = "daniadinugroho@gmail.com"; // Replace with your Gmail
-    private static final String EMAIL_PASSWORD = "bqwq rpwk srdu avyn"; // Replace with your app password
+    private static final String SMTP_HOST = "smtp.gmail.com"; // This will be replaced with the ESP's SMTP host
+    private static final String SMTP_PORT = "587"; // This will be replaced with the ESP's SMTP port
+    // private static final String SMTP_USERNAME = "daniadinugroho@gmail.com"; // Removed Gmail username
+    // private static final String EMAIL_PASSWORD = "bqwq rpwk srdu avyn"; // Removed Gmail app password
     private static final String EMAIL_TEMPLATE_PATH = "src/main/webapp/WEB-INF/emailTemplates/ticket_email_template.html";
 
     public static void sendTicketEmail(String toEmail, String ticketId, Map<String, String> orderDetails, InputStream concertImageStream) throws MessagingException, IOException {
@@ -38,12 +38,13 @@ public class EmailUtil {
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(EMAIL_FROM, EMAIL_PASSWORD);
+                // This will be replaced with the ESP's authentication
+                return new PasswordAuthentication("", "");
             }
         });
 
         Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(EMAIL_FROM));
+        message.setFrom(new InternetAddress("noreply@CoNEX.com"));
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
         message.setSubject("Your Concert Ticket - " + orderDetails.get("title"));
 
