@@ -1,0 +1,114 @@
+{"_id":"argparse","_rev":"85-3c47e0e59c8ebb65d86f681bea8d49e2","name":"argparse","description":"CLI arguments parser. Native port of python's argparse.","dist-tags":{"latest":"2.0.1"},"versions":{"0.1.0":{"name":"argparse","description":"Very powerful CLI arguments parser. Native port of argparse - python's options parsing library","version":"0.1.0","keywords":["cli","parser","argparse","option","args"],"homepage":"https://github.com/nodeca/argparse","author":{"name":"Eugene Shkuropat","email":"e.shkuropat@gmail.com"},"bugs":{"url":"https://github.com/nodeca/argparse/issues"},"license":{"type":"MIT","url":"https://github.com/nodeca/argparse/blob/master/LICENSE"},"repository":{"type":"git","url":"git://github.com/nodeca/argparse.git"},"main":"./index.js","dependencies":{"underscore":"1.3.1","underscore.string":"2.1.1"},"engines":{"node":">= 0.6.0"},"_npmUser":{"name":"vitaly","email":"vitaly@rcdesign.ru"},"_id":"argparse@0.1.0","devDependencies":{},"optionalDependencies":{},"_engineSupported":true,"_npmVersion":"1.1.12","_nodeVersion":"v0.6.14","_defaultsLoaded":true,"dist":{"shasum":"141038690326bb1fe60c3aa2fd32e60252cdf3ea","tarball":"https://registry.npmjs.org/argparse/-/argparse-0.1.0.tgz","integrity":"sha512-uy8SkrmCXhLnMYAWAQPEbylYL/brWv1TyCGkhv1DyQWnPKAyayCTmPEjlQBCLJeB2mu65gd3kl0vkbH+VFYYMw==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEYCIQCFG7TSGdd5vNrNubl73KgXCF3OL29pmct700bQgudrsQIhAJAQZGX8UgGBBeDfqR3yzDVooelfRLfu00lC69Riweik"}]},"scripts":{},"maintainers":[{"name":"vitaly","email":"vitaly@rcdesign.ru"}],"directories":{}},"0.1.1":{"name":"argparse","description":"Very powerful CLI arguments parser. Native port of argparse - python's options parsing library","version":"0.1.1","keywords":["cli","parser","argparse","option","args"],"homepage":"https://github.com/nodeca/argparse","author":{"name":"Eugene Shkuropat","email":"e.shkuropat@gmail.com"},"bugs":{"url":"https://github.com/nodeca/argparse/issues"},"license":{"type":"MIT","url":"https://github.com/nodeca/argparse/blob/master/LICENSE"},"repository":{"type":"git","url":"git://github.com/nodeca/argparse.git"},"main":"./index.js","dependencies":{"underscore":"1.3.1","underscore.string":"2.1.1"},"engines":{"node":">= 0.6.0"},"_npmUser":{"name":"vitaly","email":"vitaly@rcdesign.ru"},"_id":"argparse@0.1.1","devDependencies":{},"optionalDependencies":{},"_engineSupported":true,"_npmVersion":"1.1.12","_nodeVersion":"v0.6.14","_defaultsLoaded":true,"dist":{"shasum":"7898577c1e2a249f3e550cc48209acc1d939026e","tarball":"https://registry.npmjs.org/argparse/-/argparse-0.1.1.tgz","integrity":"sha512-MRI093BmrdlmcQZQlNI0NWhPumyyU5EjotK9p2ZJ6zMkeJRfry/SVNS7+CO7VciW78GUupoEd8quweUJGWCmHw==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEYCIQCdBO+eDyMlySNjH80Z7R0vos8sDWzm3bAT3p1TtsOO6AIhAI4k0v6s0N6RTjaNGkkMyvKnwSpsrFo6uFEof4D19qjf"}]},"scripts":{},"maintainers":[{"name":"vitaly","email":"vitaly@rcdesign.ru"}],"directories":{}},"0.1.2":{"name":"argparse","description":"Very powerful CLI arguments parser. Native port of argparse - python's options parsing library","version":"0.1.2","keywords":["cli","parser","argparse","option","args"],"homepage":"https://github.com/nodeca/argparse","author":{"name":"Eugene Shkuropat","email":"e.shkuropat@gmail.com"},"bugs":{"url":"https://github.com/nodeca/argparse/issues"},"license":{"type":"MIT","url":"https://github.com/nodeca/argparse/blob/master/LICENSE"},"repository":{"type":"git","url":"git://github.com/nodeca/argparse.git"},"main":"./index.js","scripts":{"test":"make test"},"dependencies":{"underscore":"1.3.1","underscore.string":"2.1.1"},"devDependencies":{"mocha":"1.0.1"},"engines":{"node":">= 0.6.0"},"_npmUser":{"name":"vitaly","email":"vitaly@rcdesign.ru"},"_id":"argparse@0.1.2","optionalDependencies":{},"_engineSupported":true,"_npmVersion":"1.1.12","_nodeVersion":"v0.6.14","_defaultsLoaded":true,"dist":{"shasum":"dab8a7925b091e24683e17f8bcf7d9a4bf00204a","tarball":"https://registry.npmjs.org/argparse/-/argparse-0.1.2.tgz","integrity":"sha512-2daqhObgjuPCbTyX05wB+3oF0EXUO3T5iQ7megZMRACcq3BeR/9uzPGT7ZzNlyPwoJRnZqQQOCdEFOUjojuP3A==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEUCIBeBaekbVEolKFKkU/GtGuFJDNWRuYCuIeWvYqym8JOyAiEA1StnUxgSP03IiAxxqlyGwkAW+SC81eN/JKeKv1iEcnM="}]},"maintainers":[{"name":"vitaly","email":"vitaly@rcdesign.ru"}],"directories":{}},"0.1.3":{"name":"argparse","description":"Very powerful CLI arguments parser. Native port of argparse - python's options parsing library","version":"0.1.3","keywords":["cli","parser","argparse","option","args"],"homepage":"https://github.com/nodeca/argparse","author":{"name":"Eugene Shkuropat","email":"e.shkuropat@gmail.com"},"bugs":{"url":"https://github.com/nodeca/argparse/issues"},"license":{"type":"MIT","url":"https://github.com/nodeca/argparse/blob/master/LICENSE"},"repository":{"type":"git","url":"git://github.com/nodeca/argparse.git"},"main":"./index.js","scripts":{"test":"make test"},"dependencies":{"underscore":"~1.3.3","underscore.string":"~2.1.1"},"devDependencies":{"mocha":"~1.2.1"},"engines":{"node":">= 0.6.0"},"_id":"argparse@0.1.3","dist":{"shasum":"e1a6a760f372b4082080da00b3ed13b46d42badf","tarball":"https://registry.npmjs.org/argparse/-/argparse-0.1.3.tgz","integrity":"sha512-9qXH2gJwulikAek2VB+IPQCwbp95UIjQvInstpQJ4cWNUkR9aDUrvVWkX0TtVRFF1sZHLW3kexeugi72DE6KwQ==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEYCIQC09SktjU3AXEk3K2+nBGezdaJ6dFDnUlJshsSQda647QIhAMNzmfAaaE1QHua1kURNhAhWIsXdw/poHA0fdjIohkCc"}]},"maintainers":[{"name":"vitaly","email":"vitaly@rcdesign.ru"}],"directories":{}},"0.1.4":{"name":"argparse","description":"Very powerful CLI arguments parser. Native port of argparse - python's options parsing library","version":"0.1.4","keywords":["cli","parser","argparse","option","args"],"homepage":"https://github.com/nodeca/argparse","author":{"name":"Eugene Shkuropat","email":"e.shkuropat@gmail.com"},"bugs":{"url":"https://github.com/nodeca/argparse/issues"},"license":{"type":"MIT","url":"https://github.com/nodeca/argparse/blob/master/LICENSE"},"repository":{"type":"git","url":"git://github.com/nodeca/argparse.git"},"main":"./index.js","scripts":{"test":"make test"},"dependencies":{"underscore":"~1.3.3","underscore.string":"~2.1.1"},"devDependencies":{"mocha":"~1.2.1"},"engines":{"node":">= 0.6.0"},"_id":"argparse@0.1.4","dist":{"shasum":"72ca942eb911bf18a011144361f3607c71ab4cfe","tarball":"https://registry.npmjs.org/argparse/-/argparse-0.1.4.tgz","integrity":"sha512-efi55L63AYDvcNJSA3QXr2XMu9m2UBRcUo5PjOjw/3Z6OP3QLxe4S2c4FrR/hchJeSyCnApagiIZM5IWC4+KXQ==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEUCIDZC9r74AFBsp5uDPTgaMuC2NaMyhywfxhv/eO1JOYEzAiEArFFYYqgIs/zkmsBOJCKsLlN2J0Ll3yWn+gSjXoCrc4g="}]},"maintainers":[{"name":"vitaly","email":"vitaly@rcdesign.ru"}],"directories":{}},"0.1.5":{"name":"argparse","description":"Very powerful CLI arguments parser. Native port of argparse - python's options parsing library","version":"0.1.5","keywords":["cli","parser","argparse","option","args"],"homepage":"https://github.com/nodeca/argparse","author":{"name":"Eugene Shkuropat","email":"e.shkuropat@gmail.com"},"bugs":{"url":"https://github.com/nodeca/argparse/issues"},"license":{"type":"MIT","url":"https://github.com/nodeca/argparse/blob/master/LICENSE"},"repository":{"type":"git","url":"git://github.com/nodeca/argparse.git"},"main":"./index.js","scripts":{"test":"make test"},"dependencies":{"underscore":"~1.3.3","underscore.string":"~2.1.1"},"devDependencies":{"mocha":"~1.2.1"},"engines":{"node":">= 0.6.0"},"_id":"argparse@0.1.5","dist":{"shasum":"bcb6f43cedd06bedc4d0e97c833f97595e16f7e5","tarball":"https://registry.npmjs.org/argparse/-/argparse-0.1.5.tgz","integrity":"sha512-AWLGdm7n/VyLApINK+5MWWkyDmwTUpUobc5I6ckWW1Y3tl05EZzhx5aue1zxpewanZGHTk9fOaarbI9ATY2MfA==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEQCIF6H4iRjSu27SWGrqLubwCjsHCvNQANdn+5VZYMklpcZAiAPNP360PKFa4c3iqidw913FP2A8eM7FTYPXJ7aj+yXKA=="}]},"_npmVersion":"1.1.59","_npmUser":{"name":"vitaly","email":"vitaly@rcdesign.ru"},"maintainers":[{"name":"vitaly","email":"vitaly@rcdesign.ru"}],"directories":{}},"0.1.6":{"name":"argparse","description":"Very powerful CLI arguments parser. Native port of argparse - python's options parsing library","version":"0.1.6","keywords":["cli","parser","argparse","option","args"],"homepage":"https://github.com/nodeca/argparse","author":{"name":"Eugene Shkuropat","email":"e.shkuropat@gmail.com"},"bugs":{"url":"https://github.com/nodeca/argparse/issues"},"license":{"type":"MIT","url":"https://github.com/nodeca/argparse/blob/master/LICENSE"},"repository":{"type":"git","url":"git://github.com/nodeca/argparse.git"},"main":"./index.js","scripts":{"test":"make test"},"dependencies":{"underscore":"~1.3.3","underscore.string":"~2.1.1"},"devDependencies":{"mocha":"~1.2.1"},"engines":{"node":">= 0.6.0"},"_id":"argparse@0.1.6","dist":{"shasum":"434d4ceaf77275e117d396293dcb2977c31b40ec","tarball":"https://registry.npmjs.org/argparse/-/argparse-0.1.6.tgz","integrity":"sha512-uW+Wd+dY1JKw+h5dBe2eeHPSxEufaxH1rZoKnJ4Cq2YZ2kYrkcKkkrc5n85I1ab1egusyeJorwFOCJ4lGqYteQ==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEQCIB2/Q9V0vc1Vr84mP+eEkvMxtMOJXuNLh+Y8CfHDZTF3AiBNTbtQ7FAuhMtqQAUp+B3VB/bjLAWlFZj7dpfKqqu1fA=="}]},"_npmVersion":"1.1.59","_npmUser":{"name":"vitaly","email":"vitaly@rcdesign.ru"},"maintainers":[{"name":"vitaly","email":"vitaly@rcdesign.ru"}],"directories":{}},"0.1.7":{"name":"argparse","description":"Very powerful CLI arguments parser. Native port of argparse - python's options parsing library","version":"0.1.7","keywords":["cli","parser","argparse","option","args"],"homepage":"https://github.com/nodeca/argparse","author":{"name":"Eugene Shkuropat","email":"e.shkuropat@gmail.com"},"bugs":{"url":"https://github.com/nodeca/argparse/issues"},"license":{"type":"MIT","url":"https://github.com/nodeca/argparse/blob/master/LICENSE"},"repository":{"type":"git","url":"git://github.com/nodeca/argparse.git"},"main":"./index.js","scripts":{"test":"make test"},"dependencies":{"underscore":"~1.3.3","underscore.string":"~2.1.1"},"devDependencies":{"mocha":"~1.2.1"},"engines":{"node":">= 0.6.0"},"_id":"argparse@0.1.7","dist":{"shasum":"eb6f77628d196ce9a56dd36abed78ae25f3b01f0","tarball":"https://registry.npmjs.org/argparse/-/argparse-0.1.7.tgz","integrity":"sha512-VMBE7gm/QWKwXKmsNdxvot/nbgOGU1d+D9Dz9g/lT0upagN1c8l46SJ9ey2YwU7t0V3jThSgH+YeUn4Y5Raw+Q==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEYCIQCKbXLK7q1Zx7OrWna+IzDt7L4N/7dz0rTgrhRnf2WtAQIhAJ9/9gEpOhBkqitryYIqFWqsqvZOiyU87wCiS6ZovgwU"}]},"_npmVersion":"1.1.61","_npmUser":{"name":"vitaly","email":"vitaly@rcdesign.ru"},"maintainers":[{"name":"vitaly","email":"vitaly@rcdesign.ru"}],"directories":{}},"0.1.8":{"name":"argparse","description":"Very powerful CLI arguments parser. Native port of argparse - python's options parsing library","version":"0.1.8","keywords":["cli","parser","argparse","option","args"],"homepage":"https://github.com/nodeca/argparse","author":{"name":"Eugene Shkuropat","email":"e.shkuropat@gmail.com"},"bugs":{"url":"https://github.com/nodeca/argparse/issues"},"license":{"type":"MIT","url":"https://github.com/nodeca/argparse/blob/master/LICENSE"},"repository":{"type":"git","url":"git://github.com/nodeca/argparse.git"},"main":"./index.js","scripts":{"test":"make test"},"dependencies":{"underscore":"~1.3.3","underscore.string":"~2.1.1"},"devDependencies":{"mocha":"~1.2.1"},"engines":{"node":">= 0.6.0"},"_id":"argparse@0.1.8","dist":{"shasum":"fafa8e68ba36528ea538a8745c33f384d1b6daf1","tarball":"https://registry.npmjs.org/argparse/-/argparse-0.1.8.tgz","integrity":"sha512-sYQyYdSbK8QXUtuLWpCd4qKHCXBFld8eN6uEXa32q91RoE937efV+5sRTaCTcvcvN3K38IXF4TLE+LsYN8mWYA==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEUCIFF4BrbnPCGcZnncinTH09b05csCvc8LyyWsqdkoTplyAiEAimRgL48EDBjofRFX4jmQQKVVCK2y0SliWxMlfWpfJ6k="}]},"_npmVersion":"1.1.66","_npmUser":{"name":"vitaly","email":"vitaly@rcdesign.ru"},"maintainers":[{"name":"vitaly","email":"vitaly@rcdesign.ru"}],"directories":{}},"0.1.9":{"name":"argparse","description":"Very powerful CLI arguments parser. Native port of argparse - python's options parsing library","version":"0.1.9","keywords":["cli","parser","argparse","option","args"],"homepage":"https://github.com/nodeca/argparse","author":{"name":"Eugene Shkuropat","email":"e.shkuropat@gmail.com"},"bugs":{"url":"https://github.com/nodeca/argparse/issues"},"license":{"type":"MIT","url":"https://github.com/nodeca/argparse/blob/master/LICENSE"},"repository":{"type":"git","url":"git://github.com/nodeca/argparse.git"},"main":"./index.js","scripts":{"test":"make test"},"dependencies":{"underscore":"~1.3.3","underscore.string":"~2.1.1"},"devDependencies":{"mocha":"~1.2.1"},"engines":{"node":">= 0.6.0"},"_id":"argparse@0.1.9","dist":{"shasum":"9c5d6da174c219dd796271ef46a8b633be298c07","tarball":"https://registry.npmjs.org/argparse/-/argparse-0.1.9.tgz","integrity":"sha512-XqEAgr02DN0UDd+CR6iJhUi6qJla4N2AUqOyAn+/BkrSOhLQAoCTe7MOaeBcpO0vv/AFMEksGy33hqF4hyijvw==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEUCICCF6d3oRrcCkIxXl2kdD6/IEazr+LQHZyoGnCpt73gWAiEAwKxazsLGrTvsm0pg7QhwDv8zMVp0vYn+DanJcdNaxR4="}]},"_npmVersion":"1.1.66","_npmUser":{"name":"vitaly","email":"vitaly@rcdesign.ru"},"maintainers":[{"name":"vitaly","email":"vitaly@rcdesign.ru"}],"directories":{}},"0.1.10":{"name":"argparse","description":"Very powerful CLI arguments parser. Native port of argparse - python's options parsing library","version":"0.1.10","keywords":["cli","parser","argparse","option","args"],"homepage":"https://github.com/nodeca/argparse","author":{"name":"Eugene Shkuropat","email":"e.shkuropat@gmail.com"},"bugs":{"url":"https://github.com/nodeca/argparse/issues"},"license":{"type":"MIT","url":"https://github.com/nodeca/argparse/blob/master/LICENSE"},"repository":{"type":"git","url":"git://github.com/nodeca/argparse.git"},"main":"./index.js","scripts":{"test":"make test"},"dependencies":{"underscore":"~1.3.3","underscore.string":"~2.1.1"},"devDependencies":{"mocha":"~1.2.1"},"engines":{"node":">= 0.6.0"},"_id":"argparse@0.1.10","dist":{"shasum":"ab77c1177fbab43831941be108dc6c1222e4980d","tarball":"https://registry.npmjs.org/argparse/-/argparse-0.1.10.tgz","integrity":"sha512-sbJS7zmzD3Q4Ggj6ZHZ2K4k7qp/Ycskz42xWjSSlyr8DSS5ISezKoHBYDAWqUnFZyCETLnunrVdMxsSU9HSWFQ==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEYCIQCnFl0/iU2dbgX8vnHtlbBo40OYFDsJ9hW9YHPxHIOQiAIhAOCG3myiw5vKg5ggBknIrrqrxF2u/Hng0H5osXCJCmRf"}]},"_npmVersion":"1.1.66","_npmUser":{"name":"vitaly","email":"vitaly@rcdesign.ru"},"maintainers":[{"name":"vitaly","email":"vitaly@rcdesign.ru"}],"directories":{}},"0.1.11":{"name":"argparse","description":"Very powerful CLI arguments parser. Native port of argparse - python's options parsing library","version":"0.1.11","keywords":["cli","parser","argparse","option","args"],"homepage":"https://github.com/nodeca/argparse","contributors":[{"name":"Eugene Shkuropat"},{"name":"Paul Jacobson"}],"bugs":{"url":"https://github.com/nodeca/argparse/issues"},"license":{"type":"MIT","url":"https://github.com/nodeca/argparse/blob/master/LICENSE"},"repository":{"type":"git","url":"git://github.com/nodeca/argparse.git"},"main":"./index.js","scripts":{"test":"make test"},"dependencies":{"underscore":"~1.4.3","underscore.string":"~2.3.1"},"devDependencies":{"mocha":"~1.8.1"},"engines":{"node":">= 0.6.0"},"_id":"argparse@0.1.11","dist":{"shasum":"c61031628629a24935badc7156714981d86ec819","tarball":"https://registry.npmjs.org/argparse/-/argparse-0.1.11.tgz","integrity":"sha512-Kqp2jpl2aFHoOZ6ejErEmFDA5IkhJoDSj/KvCyxd4kIRVVYr/I1R+PeukiWa0n0BtwisBioybafnjdSH3kRytg==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEUCIAHzEXTPMVZWDDhS4inkje61IqYJs6k7Q3ZgMidDWn39AiEA5LohKSHdBSfnq3tgM40Wun4hyUBti6J8RruqKQjpdks="}]},"_npmVersion":"1.1.66","_npmUser":{"name":"vitaly","email":"vitaly@rcdesign.ru"},"maintainers":[{"name":"vitaly","email":"vitaly@rcdesign.ru"}],"directories":{}},"0.1.12":{"name":"ildProcessByStdio<Writable, Readable, null>;
+    function spawn(
+        command: string,
+        options: SpawnOptionsWithStdioTuple<StdioPipe, StdioNull, StdioPipe>,
+    ): ChildProcessByStdio<Writable, null, Readable>;
+    function spawn(
+        command: string,
+        options: SpawnOptionsWithStdioTuple<StdioNull, StdioPipe, StdioPipe>,
+    ): ChildProcessByStdio<null, Readable, Readable>;
+    function spawn(
+        command: string,
+        options: SpawnOptionsWithStdioTuple<StdioPipe, StdioNull, StdioNull>,
+    ): ChildProcessByStdio<Writable, null, null>;
+    function spawn(
+        command: string,
+        options: SpawnOptionsWithStdioTuple<StdioNull, StdioPipe, StdioNull>,
+    ): ChildProcessByStdio<null, Readable, null>;
+    function spawn(
+        command: string,
+        options: SpawnOptionsWithStdioTuple<StdioNull, StdioNull, StdioPipe>,
+    ): ChildProcessByStdio<null, null, Readable>;
+    function spawn(
+        command: string,
+        options: SpawnOptionsWithStdioTuple<StdioNull, StdioNull, StdioNull>,
+    ): ChildProcessByStdio<null, null, null>;
+    function spawn(command: string, options: SpawnOptions): ChildProcess;
+    // overloads of spawn with 'args'
+    function spawn(
+        command: string,
+        args?: readonly string[],
+        options?: SpawnOptionsWithoutStdio,
+    ): ChildProcessWithoutNullStreams;
+    function spawn(
+        command: string,
+        args: readonly string[],
+        options: SpawnOptionsWithStdioTuple<StdioPipe, StdioPipe, StdioPipe>,
+    ): ChildProcessByStdio<Writable, Readable, Readable>;
+    function spawn(
+        command: string,
+        args: readonly string[],
+        options: SpawnOptionsWithStdioTuple<StdioPipe, StdioPipe, StdioNull>,
+    ): ChildProcessByStdio<Writable, Readable, null>;
+    function spawn(
+        command: string,
+        args: readonly string[],
+        options: SpawnOptionsWithStdioTuple<StdioPipe, StdioNull, StdioPipe>,
+    ): ChildProcessByStdio<Writable, null, Readable>;
+    function spawn(
+        command: string,
+        args: readonly string[],
+        options: SpawnOptionsWithStdioTuple<StdioNull, StdioPipe, StdioPipe>,
+    ): ChildProcessByStdio<null, Readable, Readable>;
+    function spawn(
+        command: string,
+        args: readonly string[],
+        options: SpawnOptionsWithStdioTuple<StdioPipe, StdioNull, StdioNull>,
+    ): ChildProcessByStdio<Writable, null, null>;
+    function spawn(
+        command: string,
+        args: readonly string[],
+        options: SpawnOptionsWithStdioTuple<StdioNull, StdioPipe, StdioNull>,
+    ): ChildProcessByStdio<null, Readable, null>;
+    function spawn(
+        command: string,
+        args: readonly string[],
+        options: SpawnOptionsWithStdioTuple<StdioNull, StdioNull, StdioPipe>,
+    ): ChildProcessByStdio<null, null, Readable>;
+    function spawn(
+        command: string,
+        args: readonly string[],
+        options: SpawnOptionsWithStdioTuple<StdioNull, StdioNull, StdioNull>,
+    ): ChildProcessByStdio<null, null, null>;
+    function spawn(command: string, args: readonly string[], options: SpawnOptions): ChildProcess;
+    interface ExecOptions extends CommonOptions {
+        shell?: string | undefined;
+        signal?: AbortSignal | undefined;
+        maxBuffer?: number | undefined;
+        killSignal?: NodeJS.Signals | number | undefined;
+    }
+    interface ExecOptionsWithStringEncoding extends ExecOptions {
+        encoding: BufferEncoding;
+    }
+    interface ExecOptionsWithBufferEncoding extends ExecOptions {
+        encoding: BufferEncoding | null; // specify `null`.
+    }
+    interface ExecException extends Error {
+        cmd?: string | undefined;
+        killed?: boolean | undefined;
+        code?: number | undefined;
+        signal?: NodeJS.Signals | undefined;
+        stdout?: string;
+        stderr?: string;
+    }
+    /**
+     * Spawns a shell then executes the `command` within that shell, buffering any
+     * generated output. The `command` string passed to the exec function is processed
+     * directly by the shell and special characters (vary based on [shell](https://en.wikipedia.org/wiki/List_of_command-line_interpreters))
+     * need to be dealt with accordingly:
+     *
+     * ```js
+     * import { exec } from 'node:child_process';
+     *
+     * exec('"/path/to/test file/test.sh" arg1 arg2');
+     * // Double quotes are used so that the space in the path is not interpreted as
+     * // a delimiter of multiple arguments.
+     *
+     * exec('echo "The \\$HOME variable is $HOME"');
+     * // The $HOME variable is escaped in the first instance, but not in the second.
+     * ```
+     *
+     * **Never pass unsanitized user input to this function. Any input containing shell**
+     * **metacharacters may be used to trigger arbitrary command execution.**
+     *
+     * If a `callback` function is provided, it is called with the arguments `(error, stdout, stderr)`. On success, `error` will

@@ -1,0 +1,535 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var util = require('util');
+var path = require('path');
+var Ajv = require('ajv');
+var globals = require('globals');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var util__default = /*#__PURE__*/_interopDefaultLegacy(util);
+var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
+var Ajv__default = /*#__PURE__*/_interopDefaultLegacy(Ajv);
+var globals__default = /*#__PURE__*/_interopDefaultLegacy(globals);
+
+/**
+ * @fileoverview Config file operations. This file must be usable in the browser,
+ * so no Node-specific code can be here.
+ * @author Nicholas C. Zakas
+ */
+
+//------------------------------------------------------------------------------
+// Private
+//------------------------------------------------------------------------------
+
+const RULE_SEVERITY_STRINGS = ["off", "warn", "error"],
+    RULE_SEVERITY = RULE_SEVERITY_STRINGS.reduce((map, value, index) => {
+        map[value] = index;
+        return map;
+    }, {}),
+    VALID_SEVERITIES = [0, 1, 2, "off", "warn", "error"];
+
+//------------------------------------------------------------------------------
+// Public Interface
+//------------------------------------------------------------------------------
+
+/**
+ * Normalizes the severity value of a rule's configuration to a number
+ * @param {(number|string|[number, ...*]|[string, ...*])} ruleConfig A rule's configuration value, generally
+ * received from the user. A valid config value is either 0, 1, 2, the string "off" (treated the same as 0),
+ * the string "warn" (treated the same as 1), the string "error" (treated the same as 2), or an array
+ * whose first element is one of the above values. Strings are matched case-insensitively.
+ * @returns {(0|1|2)} The numeric severity value if the config value was valid, otherwise 0.
+ */
+function getRuleSeverity(ruleConfig) {
+    const severityValue = Array.isArray(ruleConfig) ? ruleConfig[0] : ruleConfig;
+
+    if (severityValue === 0 || severityValue === 1 || severityValue === 2) {
+        return severityValue;
+    }
+
+    if (typeof severityValue === "string") {
+        return RULE_SEVERITY[severityValue.toLowerCase()] || 0;
+    }
+
+    return 0;
+}
+
+/**
+ * Converts old-style severity settings (0, 1, 2) into new-style
+ * severity settings (off, warn, error) for all rules. Assumption is that severity
+ * values have already been validated as correct.
+ * @param {Object} config The config object to normalize.
+ * @returns {void}
+ */
+function normalizeToStrings(config) {
+
+    if (config.rules) {
+        Object.keys(config.rules).forEach(ruleId => {
+            const ruleConfig = config.rules[ruleId];
+
+            if (typeof ruleConfig === "number") {
+                config.rules[ruleId] = RULE_SEVERITY_STRINGS[ruleConfig] || RULE_SEVERITY_STRINGS[0];
+            } else if (Array.isArray(ruleConfig) && typeof ruleConfig[0] === "number") {
+                ruleConfig[0] = RULE_SEVERITY_STRINGS[ruleConfig[0]] || RULE_SEVERITY_STRINGS[0];
+            }
+        });
+    }
+}
+
+/**
+ * Determines if the severity for the given rule configuration represents an error.
+ * @param {int|string|Array} ruleConfig The configuration for an individual rule.
+ * @returns {boolean} True if the rule represents an error, false if not.
+ */
+function isErrorSeverity(ruleConfig) {
+    return getRuleSeverity(ruleConfig) === 2;
+}
+
+/**
+ * Checks whether a given config has valid severity or not.
+ * @param {number|string|Array} ruleConfig The configuration for an individual rule.
+ * @returns {boolean} `true` if the configuration has valid severity.
+ */
+function isValidSeverity(ruleConfig) {
+    let severity = Array.isArray(ruleConfig) ? ruleConfig[0] : ruleConfig;
+
+    if (typeof severity === "string") {
+        severity = severity.toLowerCase();
+    }
+    return VALID_SEVERITIES.indexOf(severity) !== -1;
+}
+
+/**
+ * Checks whether every rule of a given config has valid severity or not.
+ * @param {Object} config The configuration for rules.
+ * @returns {boolean} `true` if the configuration has valid severity.
+ */
+function isEverySeverityValid(config) {
+    return Object.keys(config).every(ruleId => isValidSeverity(config[ruleId]));
+}
+
+/**
+ * Normalizes a value for a global in a config
+ * @param {(boolean|string|null)} configuredValue The value given for a global in configuration or in
+ * a global directive comment
+ * @returns {("readable"|"writeable"|"off")} The value normalized as a string
+ * @throws Error if global value is invalid
+ */
+function normalizeConfigGlobal(configuredValue) {
+    switch (configuredValue) {
+        case "off":
+            return "off";
+
+        case true:
+        case "true":
+        case "writeable":
+        case "writable":
+            return "writable";
+
+        case null:
+        case false:
+        case "false":
+        case "readable":
+        case "readonly":
+            return "readonly";
+
+        default:
+            throw new Error(`'${configuredValue}' is not a valid configuration for a global (use 'readonly', 'writable', or 'off')`);
+    }
+}
+
+var ConfigOps = {
+    __proto__: null,
+    getRuleSeverity: getRuleSeverity,
+    normalizeToStrings: normalizeToStrings,
+    isErrorSeverity: isErrorSeverity,
+    isValidSeverity: isValidSeverity,
+    isEverySeverityValid: isEverySeverityValid,
+    normalizeConfigGlobal: normalizeConfigGlobal
+};
+
+/**
+ * @fileoverview Provide the function that emits deprecation warnings.
+ * @author Toru Nagashima <http://github.com/mysticatea>
+ */
+
+//------------------------------------------------------------------------------
+// Private
+//------------------------------------------------------------------------------
+
+// Defitions for deprecation warnings.
+const deprecationWarningMessages = {
+    ESLINT_LEGACY_ECMAFEATURES:
+        "The 'ecmaFeatures' config file property is deprecated and has no effect.",
+    ESLINT_PERSONAL_CONFIG_LOAD:
+        "'~/.eslintrc.*' config files have been deprecated. " +
+        "Please use a config file per project or the '--config' option.",
+    ESLINT_PERSONAL_CONFIG_SUPPRESS:
+        "'~/.eslintrc.*' config files have been deprecated. " +
+        "Please remove it or add 'root:true' to the config files in your " +
+        "projects in order to avoid loading '~/.eslintrc.*' accidentally."
+};
+
+const sourceFileErrorCache = new Set();
+
+/**
+ * Emits a deprecation warning containing a given filepath. A new deprecation warning is emitted
+ * for each unique file path, but repeated invocations with the same file path have no effect.
+ * No warnings are emitted if the `--no-deprecation` or `--no-warnings` Node runtime flags are active.
+ * @param {string} source The name of the configuration source to report the warning for.
+ * @param {string} errorCode The warning message to show.
+ * @returns {void}
+ */
+function emitDeprecationWarning(source, errorCode) {
+    const cacheKey = JSON.stringify({ source, errorCode });
+
+    if (sourceFileErrorCache.has(cacheKey)) {
+        return;
+    }
+    sourceFileErrorCache.add(cacheKey);
+
+    const rel = path__default["default"].relative(process.cwd(), source);
+    const message = deprecationWarningMessages[errorCode];
+
+    process.emitWarning(
+        `${message} (found in "${rel}")`,
+        "DeprecationWarning",
+        errorCode
+    );
+}
+
+/**
+ * @fileoverview The instance of Ajv validator.
+ * @author Evgeny Poberezkin
+ */
+
+//-----------------------------------------------------------------------------
+// Helpers
+//-----------------------------------------------------------------------------
+
+/*
+ * Copied from ajv/lib/refs/json-schema-draft-04.json
+ * The MIT License (MIT)
+ * Copyright (c) 2015-2017 Evgeny Poberezkin
+ */
+const metaSchema = {
+    id: "http://json-schema.org/draft-04/schema#",
+    $schema: "http://json-schema.org/draft-04/schema#",
+    description: "Core schema meta-schema",
+    definitions: {
+        schemaArray: {
+            type: "array",
+            minItems: 1,
+            items: { $ref: "#" }
+        },
+        positiveInteger: {
+            type: "integer",
+            minimum: 0
+        },
+        positiveIntegerDefault0: {
+            allOf: [{ $ref: "#/definitions/positiveInteger" }, { default: 0 }]
+        },
+        simpleTypes: {
+            enum: ["array", "boolean", "integer", "null", "number", "object", "string"]
+        },
+        stringArray: {
+            type: "array",
+            items: { type: "string" },
+            minItems: 1,
+            uniqueItems: true
+        }
+    },
+    type: "object",
+    properties: {
+        id: {
+            type: "string"
+        },
+        $schema: {
+            type: "string"
+        },
+        title: {
+            type: "string"
+        },
+        description: {
+            type: "string"
+        },
+        default: { },
+        multipleOf: {
+            type: "number",
+            minimum: 0,
+            exclusiveMinimum: true
+        },
+        maximum: {
+            type: "number"
+        },
+        exclusiveMaximum: {
+            type: "boolean",
+            default: false
+        },
+        minimum: {
+            type: "number"
+        },
+        exclusiveMinimum: {
+            type: "boolean",
+            default: false
+        },
+        maxLength: { $ref: "#/definitions/positiveInteger" },
+        minLength: { $ref: "#/definitions/positiveIntegerDefault0" },
+        pattern: {
+            type: "string",
+            format: "regex"
+        },
+        additionalItems: {
+            anyOf: [
+                { type: "boolean" },
+                { $ref: "#" }
+            ],
+            default: { }
+        },
+        items: {
+            anyOf: [
+                { $ref: "#" },
+                { $ref: "#/definitions/schemaArray" }
+            ],
+            default: { }
+        },
+        maxItems: { $ref: "#/definitions/positiveInteger" },
+        minItems: { $ref: "#/definitions/positiveIntegerDefault0" },
+        uniqueItems: {
+            type: "boolean",
+            default: false
+        },
+        maxProperties: { $ref: "#/definitions/positiveInteger" },
+        minProperties: { $ref: "#/definitions/positiveIntegerDefault0" },
+        required: { $ref: "#/definitions/stringArray" },
+        additionalProperties: {
+            anyOf: [
+                { type: "boolean" },
+                { $ref: "#" }
+            ],
+            default: { }
+        },
+        definitions: {
+            type: "object",
+            additionalProperties: { $ref: "#" },
+            default: { }
+        },
+        properties: {
+            type: "object",
+            additionalProperties: { $ref: "#" },
+            default: { }
+        },
+        patternProperties: {
+            type: "object",
+            additionalProperties: { $ref: "#" },
+            default: { }
+        },
+        dependencies: {
+            type: "object",
+            additionalProperties: {
+                anyOf: [
+                    { $ref: "#" },
+                    { $ref: "#/definitions/stringArray" }
+                ]
+            }
+        },
+        enum: {
+            type: "array",
+            minItems: 1,
+            uniqueItems: true
+        },
+        type: {
+            anyOf: [
+                { $ref: "#/definitions/simpleTypes" },
+                {
+                    type: "array",
+                    items: { $ref: "#/definitions/simpleTypes" },
+                    minItems: 1,
+                    uniqueItems: true
+                }
+            ]
+        },
+        format: { type: "string" },
+        allOf: { $ref: "#/definitions/schemaArray" },
+        anyOf: { $ref: "#/definitions/schemaArray" },
+        oneOf: { $ref: "#/definitions/schemaArray" },
+        not: { $ref: "#" }
+    },
+    dependencies: {
+        exclusiveMaximum: ["maximum"],
+        exclusiveMinimum: ["minimum"]
+    },
+    default: { }
+};
+
+//------------------------------------------------------------------------------
+// Public Interface
+//------------------------------------------------------------------------------
+
+var ajvOrig = (additionalOptions = {}) => {
+    const ajv = new Ajv__default["default"]({
+        meta: false,
+        useDefaults: true,
+        validateSchema: false,
+        missingRefs: "ignore",
+        verbose: true,
+        schemaId: "auto",
+        ...additionalOptions
+    });
+
+    ajv.addMetaSchema(metaSchema);
+    // eslint-disable-next-line no-underscore-dangle
+    ajv._opts.defaultMeta = metaSchema.id;
+
+    return ajv;
+};
+
+/**
+ * @fileoverview Applies default rule options
+ * @author JoshuaKGoldberg
+ */
+
+/**
+ * Check if the variable contains an object strictly rejecting arrays
+ * @param {unknown} value an object
+ * @returns {boolean} Whether value is an object
+ */
+function isObjectNotArray(value) {
+    return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/**
+ * Deeply merges second on top of first, creating a new {} object if needed.
+ * @param {T} first Base, default value.
+ * @param {U} second User-specified value.
+ * @returns {T | U | (T & U)} Merged equivalent of second on top of first.
+ */
+function deepMergeObjects(first, second) {
+    if (second === void 0) {
+        return first;
+    }
+
+    if (!isObjectNotArray(first) || !isObjectNotArray(second)) {
+        return second;
+    }
+
+    const result = { ...first, ...second };
+
+    for (const key of Object.keys(second)) {
+        if (Object.prototype.propertyIsEnumerable.call(first, key)) {
+            result[key] = deepMergeObjects(first[key], second[key]);
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Deeply merges second on top of first, creating a new [] array if needed.
+ * @param {T[] | undefined} first Base, default values.
+ * @param {U[] | undefined} second User-specified values.
+ * @returns {(T | U | (T & U))[]} Merged equivalent of second on top of first.
+ */
+function deepMergeArrays(first, second) {
+    if (!first || !second) {
+        return second || first || [];
+    }
+
+    return [
+        ...first.map((value, i) => deepMergeObjects(value, second[i])),
+        ...second.slice(first.length)
+    ];
+}
+
+/**
+ * @fileoverview Defines a schema for configs.
+ * @author Sylvan Mably
+ */
+
+const baseConfigProperties = {
+    $schema: { type: "string" },
+    env: { type: "object" },
+    extends: { $ref: "#/definitions/stringOrStrings" },
+    globals: { type: "object" },
+    overrides: {
+        type: "array",
+        items: { $ref: "#/definitions/overrideConfig" },
+        additionalItems: false
+    },
+    parser: { type: ["string", "null"] },
+    parserOptions: { type: "object" },
+    plugins: { type: "array" },
+    processor: { type: "string" },
+    rules: { type: "object" },
+    settings: { type: "object" },
+    noInlineConfig: { type: "boolean" },
+    reportUnusedDisableDirectives: { type: "boolean" },
+
+    ecmaFeatures: { type: "object" } // deprecated; logs a warning when used
+};
+
+const configSchema = {
+    definitions: {
+        stringOrStrings: {
+            oneOf: [
+                { type: "string" },
+                {
+                    type: "array",
+                    items: { type: "string" },
+                    additionalItems: false
+                }
+            ]
+        },
+        stringOrStringsRequired: {
+            oneOf: [
+                { type: "string" },
+                {
+                    type: "array",
+                    items: { type: "string" },
+                    additionalItems: false,
+                    minItems: 1
+                }
+            ]
+        },
+
+        // Config at top-level.
+        objectConfig: {
+            type: "object",
+            properties: {
+                root: { type: "boolean" },
+                ignorePatterns: { $ref: "#/definitions/stringOrStrings" },
+                ...baseConfigProperties
+            },
+            additionalProperties: false
+        },
+
+        // Config in `overrides`.
+        overrideConfig: {
+            type: "object",
+            properties: {
+                excludedFiles: { $ref: "#/definitions/stringOrStrings" },
+                files: { $ref: "#/definitions/stringOrStringsRequired" },
+                ...baseConfigProperties
+            },
+            required: ["files"],
+            additionalProperties: false
+        }
+    },
+
+    $ref: "#/definitions/objectConfig"
+};
+
+/**
+ * @fileoverview Defines environment settings and globals.
+ * @author Elan Shanker
+ */
+
+//------------------                                    яШ    яДявяц          я°  яњ    яЇ  я¦яєяО  я’яШявя°  яД    яД        ятяцяОям                                                                              яШ    ям        ям                                                      яцяОяЭ            яД  я¦    яШямявяцяв  яѓ    яњ  яв    яО          яцямямяШ                                      яО                  я№            яв  я~    яє                        яв                                  яО    яї                  яО        явяД    яв                                                                        яЇяШ            я€  я’    я°яОяїяµ    я€яО  я°яОяОяОяв  яц        явяїяД   яО                                  яв                  яШ          ям                                                                                                  ясяОяв  язясяЭ                        яО                                                    яс                  ямяв    яы  яцяв  яз                  ям                                                                    ям  яв    яыяцяляШ        я°  яЧ                яц                                                              яУ    яц    яц          яц                                                                                              яц                                                                                      яО                яОям  ям  яШ                            яц                                                    яѓ                яДяОяцяцяыяЭяв        яШ              ямяє        яц  яШявямявямясямям                                        ят    яц 
+              я°                                              яц                                      яы  яв  ям  ям          ям                                                                                      яы                                                                                                             яЭ    яв          я¦    яњ                                                                                      яв      яц                                                    ял                                                яц                                                                                          яв                          ям                                                                        ям    ям                                        яц  яШяцям                                                      яв    ям      яШ  яЧ  яО                        яШявяД      ямяв                                                  ям  ям      яє  яО                            ямямяШ  яв                                                      яц  ям    яв                                                                                                    ям  яШ    яО                  я¦                я€яО    яв  яв                яЭ                        яО                                    яв                                                              яв                                              яО                                                        яОяШ    яц        яц                                  яО                                                              яв            яв                                ям                                                      ям    яв              яв                                        ям    ял                                        яД    явяв            ям                                яШ                                                          яв                                                  яШ                                                        яШ      яв        ям                  ят                                                                                                          яс                         яз  ям                                                                                                            яЭ                                    ям                                                                                яО                                                               U "                         #                                  
+     	   
+  
+                                                     !   [ 4             $ $         3                      )       %             !            	     " $ 2 $        '      ' ' # ' ' ( (  (  (        *          " ;  C G  I J ! L Q # S U ) W [ ,         Ъ‡oЏ    Э« i    Э®м.V ? Г  V ?V ?V ?V ?V ?V ?V ?V ?V ?V ?V ? (V ? ф (V ?Њ -k # ( #V ? -4 "
+ #B -4 " ф ( (V ?V ?V ?Р V ?№ !P EА 1і E Eщ E 1© E E# -њ Eа Er E№ E3 1D E3 1Y E+ -! 1‘ @№ !9 "‹ ,s "+ ,V ?V ?V ?V ?V ?V ?i "i ; "i "+ "Ђ ` "E ; 5яУ2 ; ;T ;E ;E "i ;i "ѓ ;Б 'n E ;; q  = Ц 'V ? ? ? ?  
