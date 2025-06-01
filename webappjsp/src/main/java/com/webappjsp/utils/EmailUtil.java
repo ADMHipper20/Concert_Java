@@ -24,8 +24,8 @@ import java.io.InputStream;
 public class EmailUtil {
     private static final String SMTP_HOST = "smtp.gmail.com"; // This will be replaced with the ESP's SMTP host
     private static final String SMTP_PORT = "587"; // This will be replaced with the ESP's SMTP port
-    // private static final String SMTP_USERNAME = "daniadinugroho@gmail.com"; // Removed Gmail username
-    // private static final String EMAIL_PASSWORD = "bqwq rpwk srdu avyn"; // Removed Gmail app password
+    // private static final String SMTP_USERNAME = "CHANGE IT WITH YOUR OWN USERNAME"; // Gmail username
+    // private static final String EMAIL_PASSWORD = "YOUR OWN APP PASSWORD"; // Gmail app password
     private static final String EMAIL_TEMPLATE_PATH = "src/main/webapp/WEB-INF/emailTemplates/ticket_email_template.html";
 
     public static void sendTicketEmail(String toEmail, String ticketId, Map<String, String> orderDetails, InputStream concertImageStream) throws MessagingException, IOException {
