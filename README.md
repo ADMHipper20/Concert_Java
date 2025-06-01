@@ -13,7 +13,12 @@ so it'll registered to your system when checking version from the CMD/Terminal.
 
 And some extensions for Java Project, I would take a pack one even though I'm not using gradle cuz just a mid-programmer I am
 
-
+## **How to start:**
+1. mvn clean install (every dependencies that being added to pom.xml needs to do this everytime, clean means that deleting recent build and make new one)
+2. mvn clean package cargo:run (package to make .war extension for running the webApp 'cause we're using JSP, and cargo it's a dependency I don't know but its for running the localhost)
+3. also for DB MYSQL, please turn it on first before doing step 2 and make sure have same name for Database, otherwise it won't work
+4. have you install ngrok? well if not, then you can just proceed until step 3. 'Cause you need to download it too and turn the ngrok with the below step at the end
+5. API keys I got is from Xendit, so I might be remove that for some reason.
 
 **Simulate Virtual Account (VA) Payment with CURL:**
 
