@@ -35,7 +35,7 @@ public class CreateQrCodeServlet extends HttpServlet {
 
     // TODO: Initialize Payment Gateway client/config here
     // Assume you have a way to get your Xendit Secret Key and Callback URL
-    private static final String XENDIT_SECRET_KEY = "xnd_development_pYMoDCLv5FCoaYkksZhBfkHo60p6jr0eRn08dlpD0OCgSD1iT0gQwOVidg"; // Replace with your test secret key
+    private static final String XENDIT_SECRET_KEY = "xnd_development_"; // Replace with your test secret key
     private static final String XENDIT_QR_CREATE_URL = "https://api.xendit.co/qr_codes";
     private static final String YOUR_CALLBACK_URL = "https://precisely-included-killdeer.ngrok-free.app/webappjsp/payment-callback"; // Replace with your ngrok URL for PaymentCallbackServlet
 
