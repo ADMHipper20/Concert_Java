@@ -26,7 +26,7 @@ import com.webappjsp.utils.jdbc;
 @WebServlet("/xendit-payment")
 public class XenditPaymentServlet extends HttpServlet {
     
-    private static final String XENDIT_API_KEY = "xnd_development_pYMoDCLv5FCoaYkksZhBfkHo60p6jr0eRn08dlpD0OCgSD1iT0gQwOVidg"; // Replace with your actual API key
+    private static final String XENDIT_API_KEY = "xnd_development_"; // Replace with your actual API key
     // Update this URL whenever you restart ngrok
     private static final String NGROK_BASE_URL = "https://precisely-included-killdeer.ngrok-free.app";
     
